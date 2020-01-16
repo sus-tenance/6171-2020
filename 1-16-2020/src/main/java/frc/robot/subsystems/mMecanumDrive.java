@@ -34,9 +34,7 @@ public class mMecanumDrive {
 
         //m_robotDrive = new MecanumDrive(m_frontRightMotor, m_rearRightMotor, m_frontLeftMotor, m_rearLeftMotor);
     }
-    public void clLamp(double clampable) {
-        
-    }
+    
     public void MecanumMAIN() {
         //  m_robotDrive.driveCartesian(oi.getDriveRightY(), oi.getDriveRightX(), oi.getDriveLeftX());
         _strafe = oi.getDriveRightX();
