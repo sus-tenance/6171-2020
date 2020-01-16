@@ -36,7 +36,7 @@ public class Drive {
     }
 
     public void MecanumMAIN() {
-        m_robotDrive.driveCartesian(oi.getDriveRightY()*5, oi.getDriveRightX()*5, oi.getDriveLeftX());
+        m_robotDrive.driveCartesian(oi.getDriveRightY()*.5, oi.getDriveRightX()*.5, oi.getDriveLeftX());
 
         if (oi.getDriveRightTrigger()>1) {
             m_robotDrive.setMaxOutput(.3);
