@@ -23,7 +23,7 @@ public class mMecanumDrive {
     private CANSparkMax m_rearLeftMotor;
     private static final int m_rearLeftMotorID = 3;
 
-    private final ADXRS450_Gyro m_gyro = new ADXRS450_Gyro(); // Gyro port is called 0, but it's just the one SPI port
+    private final ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
 
     private MecanumDrive m_robotDrive;
 
@@ -33,16 +33,12 @@ public class mMecanumDrive {
 
     private final double _POWERMAX = 0.3;
 
-    private WPI_TalonFX m_talonBOiboibi;
-
     public void MecanumINIT() {     
         oi = new OI();
         m_frontRightMotor = new CANSparkMax(m_frontRightMotorID, MotorType.kBrushless);
         m_rearRightMotor = new CANSparkMax(m_rearRightMotorID, MotorType.kBrushless);
         m_frontLeftMotor = new CANSparkMax(m_frontLeftMotorID, MotorType.kBrushless);
         m_rearLeftMotor = new CANSparkMax(m_rearLeftMotorID, MotorType.kBrushless);
-
-        m_talonBOiboibi = new WPI_TalonFX(0);
 
         m_robotDrive = new MecanumDrive(m_frontRightMotor, m_rearRightMotor, m_frontLeftMotor, m_rearLeftMotor);
         m_robotDrive.setMaxOutput(_POWERMAX);
@@ -67,7 +63,7 @@ public class mMecanumDrive {
             m_rearRightMotor.set(_rb*_POWERMAX);
             m_frontLeftMotor.set(_lf*_POWERMAX);
             m_rearLeftMotor.set(_lb*_POWERMAX);
-            */
+        */
         
         }
     }
