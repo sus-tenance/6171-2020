@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -19,7 +18,7 @@ public class mMecanumDrive {
     private CANSparkMax m_rearRightMotor;
     private static final int m_rearRightMotorID = 1;
     private CANSparkMax m_frontLeftMotor;
-    private static final int m_frontLefMotorID = 2;
+    private static final int m_frontLeftMotorID = 2;
     private CANSparkMax m_rearLeftMotor;
     private static final int m_rearLeftMotorID = 3;
 
