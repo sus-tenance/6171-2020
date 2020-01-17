@@ -19,7 +19,7 @@ public class mMecanumDrive {
     private CANSparkMax m_rearRightMotor;
     private static final int m_rearRightMotorID = 1;
     private CANSparkMax m_frontLeftMotor;
-    private static final int m_frontLeftMotorID = 2;
+    private static final int m_frontLefMotorID = 2;
     private CANSparkMax m_rearLeftMotor;
     private static final int m_rearLeftMotorID = 3;
 
@@ -33,7 +33,7 @@ public class mMecanumDrive {
 
     private final double _POWERMAX = 0.3;
 
-    public void MecanumINIT() {     
+    public void MecanumINIT() {
         oi = new OI();
         m_frontRightMotor = new CANSparkMax(m_frontRightMotorID, MotorType.kBrushless);
         m_rearRightMotor = new CANSparkMax(m_rearRightMotorID, MotorType.kBrushless);
@@ -45,10 +45,10 @@ public class mMecanumDrive {
 
         m_gyro.calibrate();
     }
-    
+
     public void MecanumMAIN() {
         m_robotDrive.driveCartesian(oi.getDriveRightY(), oi.getDriveRightX(), oi.getDriveLeftX(), m_gyro.getAngle());
-        
+
         /*
             _strafe = oi.getDriveRightX();
             _drive = oi.getDriveRightY();
@@ -64,6 +64,6 @@ public class mMecanumDrive {
             m_frontLeftMotor.set(_lf*_POWERMAX);
             m_rearLeftMotor.set(_lb*_POWERMAX);
         */
-        
+
         }
     }
