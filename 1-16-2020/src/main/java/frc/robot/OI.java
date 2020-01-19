@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI 
 {
 	//constants
+	private static final double oi_joystickDeadband = 0.2;	//	Modify this here to change the joystick deadband in getDrive and saitek methods.
+	
 	//Main xbox controller
 	public static final int LEFT_X =0;
 	public static final int LEFT_Y =1;
@@ -108,27 +110,19 @@ public class OI
 	//Return Methods for driving
 	public double getDriveLeftY()
 	{
-		if(Math.abs(drive.getRawAxis(LEFT_Y))< 0.2)
-			return 0;
-		return drive.getRawAxis(LEFT_Y);
+		return applyDeadband(drive.getRawAxis(LEFT_Y), oi_joystickDeadband);
 	}
 	public double getDriveLeftX()
 	{
-		if(Math.abs(drive.getRawAxis(LEFT_X))< 0.2)
-			return 0;
-		return drive.getRawAxis(LEFT_X);
+		return applyDeadband(drive.getRawAxis(LEFT_X), oi_joystickDeadband);
 	}
 	public double getDriveRightX()
 	{
-		if(Math.abs(drive.getRawAxis(RIGHT_X))< 0.2)
-			return 0;
-		return drive.getRawAxis(RIGHT_X);
+		return applyDeadband(drive.getRawAxis(RIGHT_X), oi_joystickDeadband);
 	}
 	public double getDriveRightY()
 	{
-		if(Math.abs(drive.getRawAxis(RIGHT_Y))< 0.2)
-			return 0;
-		return drive.getRawAxis(RIGHT_Y);
+		return applyDeadband(drive.getRawAxis(RIGHT_Y), oi_joystickDeadband);
 	}
 	public double getDriveLeftTrigger()
 	{
@@ -212,26 +206,36 @@ public class OI
 	}
 	public double getSaitekZ()
 	{
-		if(Math.abs(saitek.getRawAxis(2))< 0.2)
-			return 0;
-		return saitek.getRawAxis(2);
+		return applyDeadband(saitek.getRawAxis(2), oi_joystickDeadband);
 	}
 	public double getSaitekY()
 	{
-		if(Math.abs(saitek.getRawAxis(1))< 0.2)
-			return 0;
-		return saitek.getRawAxis(1);
+			return applyDeadband(saitek.getRawAxis(1), oi_joystickDeadband);
 	}
 	public double getSaitekX()
 	{
-		if(Math.abs(saitek.getRawAxis(0))< 0.2)
-			return 0;
-		return saitek.getRawAxis(0);
+		return applyDeadband(saitek.getRawAxis(0), oi_joystickDeadband);
 	}
 	public double getSaitekZRotate()
 	{
-		if(Math.abs(saitek.getRawAxis(3))< 0.2)
-			return 0;
-		return saitek.getRawAxis(3);
+		return applyDeadband(saitek.getRawAxis(3), oi_joystickDeadband);
+	}
+	/** *** COPIED FROM WPILIB: https://github.com/wpilibsuite/allwpilib/blob/master/wpilibj/src/main/java/edu/wpi/first/wpilibj/drive/RobotDriveBase.java ***
+	 * Returns 0.0 if the given value is within the specified range around zero. The remaining range
+	 * between the deadband and 1.0 is scaled from 0.0 to 1.0.
+	 *
+	 * @param value    value to clip
+	 * @param deadband range around zero
+	 */
+	protected double applyDeadband(double value, double deadband) {
+		if (Math.abs(value) > deadband) {
+		if (value > 0.0) {
+			return (value - deadband) / (1.0 - deadband);
+		} else {
+			return (value + deadband) / (1.0 - deadband);
+		}
+		} else {
+			return 0.0;
+		}
 	}
 }
