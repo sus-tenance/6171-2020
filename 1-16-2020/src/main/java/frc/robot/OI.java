@@ -110,19 +110,19 @@ public class OI
 	//Return Methods for driving
 	public double getDriveLeftY()
 	{
-		return applyDeadband(drive.getRawAxis(LEFT_Y), oi_joystickDeadband);
+		return joystickSmoother(applyDeadband(drive.getRawAxis(LEFT_Y), oi_joystickDeadband));
 	}
 	public double getDriveLeftX()
 	{
-		return applyDeadband(drive.getRawAxis(LEFT_X), oi_joystickDeadband);
+		return joystickSmoother(applyDeadband(drive.getRawAxis(LEFT_X), oi_joystickDeadband));
 	}
 	public double getDriveRightX()
 	{
-		return applyDeadband(drive.getRawAxis(RIGHT_X), oi_joystickDeadband);
+		return joystickSmoother(applyDeadband(drive.getRawAxis(RIGHT_X), oi_joystickDeadband));
 	}
 	public double getDriveRightY()
 	{
-		return applyDeadband(drive.getRawAxis(RIGHT_Y), oi_joystickDeadband);
+		return joystickSmoother(applyDeadband(drive.getRawAxis(RIGHT_Y), oi_joystickDeadband));
 	}
 	public double getDriveLeftTrigger()
 	{
@@ -206,19 +206,19 @@ public class OI
 	}
 	public double getSaitekZ()
 	{
-		return applyDeadband(saitek.getRawAxis(2), oi_joystickDeadband);
+		return joystickSmoother(applyDeadband(saitek.getRawAxis(2), oi_joystickDeadband));
 	}
 	public double getSaitekY()
 	{
-			return applyDeadband(saitek.getRawAxis(1), oi_joystickDeadband);
+		return joystickSmoother(applyDeadband(saitek.getRawAxis(1), oi_joystickDeadband));
 	}
 	public double getSaitekX()
 	{
-		return applyDeadband(saitek.getRawAxis(0), oi_joystickDeadband);
+		return joystickSmoother(applyDeadband(saitek.getRawAxis(0), oi_joystickDeadband));
 	}
 	public double getSaitekZRotate()
 	{
-		return applyDeadband(saitek.getRawAxis(3), oi_joystickDeadband);
+		return joystickSmoother(applyDeadband(saitek.getRawAxis(3), oi_joystickDeadband));
 	}
 	/** *** COPIED FROM WPILIB: https://github.com/wpilibsuite/allwpilib/blob/master/wpilibj/src/main/java/edu/wpi/first/wpilibj/drive/RobotDriveBase.java ***
 	 * Returns 0.0 if the given value is within the specified range around zero. The remaining range
@@ -237,5 +237,9 @@ public class OI
 		} else {
 			return 0.0;
 		}
+	}
+
+	protected double joystickSmoother(double value) {	//	Smooths out joystick values such that sensitivity is lower towards the bottom end.
+		return Math.abs(value)*value;
 	}
 }
