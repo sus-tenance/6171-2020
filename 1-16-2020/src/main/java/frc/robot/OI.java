@@ -227,19 +227,20 @@ public class OI
 	 * @param value    value to clip
 	 * @param deadband range around zero
 	 */
-	protected double applyDeadband(double value, double deadband) {
+	protected double applyDeadband(final double value, final double deadband) {
 		if (Math.abs(value) > deadband) {
-		if (value > 0.0) {
-			return (value - deadband) / (1.0 - deadband);
-		} else {
-			return (value + deadband) / (1.0 - deadband);
-		}
-		} else {
-			return 0.0;
-		}
+			if (value > 0.0) {
+				return (value - deadband) / (1.0 - deadband);
+			} else {
+				return (value + deadband) / (1.0 - deadband);
+			}
+			} else {
+				return 0.0;
+			}
 	}
 
-	protected double joystickSmoother(double value) {	//	Smooths out joystick values such that sensitivity is lower towards the bottom end.
+	protected double joystickSmoother(final double value) { // Smooths out joystick values such that sensitivity is
+															// lower towards the bottom end.
 		return Math.abs(value)*value;
 	}
 }
