@@ -220,6 +220,11 @@ public class OI
 	{
 		return joystickSmoother(applyDeadband(saitek.getRawAxis(3), oi_joystickDeadband));
 	}
+
+
+	public void setOIDeadband(double oiDB) {
+		oi_joystickDeadband = oiDB;
+	}
 	/** *** COPIED FROM WPILIB: https://github.com/wpilibsuite/allwpilib/blob/master/wpilibj/src/main/java/edu/wpi/first/wpilibj/drive/RobotDriveBase.java ***
 	 * Returns 0.0 if the given value is within the specified range around zero. The remaining range
 	 * between the deadband and 1.0 is scaled from 0.0 to 1.0.
@@ -242,9 +247,5 @@ public class OI
 	protected double joystickSmoother(final double value) { // Smooths out joystick values such that sensitivity is
 															// lower towards the bottom end.
 		return Math.abs(value)*value;
-	}
-
-	public void setOIDeadband(int oiDB) {
-		oi_joystickDeadband = oiDB;
 	}
 }
