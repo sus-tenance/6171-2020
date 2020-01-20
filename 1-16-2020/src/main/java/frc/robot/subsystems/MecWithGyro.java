@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 //  import edu.wpi.first.wpiutil.math.MathUtil;
 
-public class mMecanumDrive {
+public class MecWithGyro {
     private OI oi;
     private CANSparkMax m_frontRightMotor;
     private static final int m_frontRightMotorID = 0;
