@@ -18,16 +18,6 @@ public class Shooting {
     }
 
     public void ShootingMAIN() {
-        while (oi.getX()) {
-            if (_limelight.getY()>10) {
-                _shootymotor.set(ControlMode.PercentOutput, 1);
-            }
-            if (_limelight.getY()>6.6 && _limelight.getY()<10) {
-                _shootymotor.set(ControlMode.PercentOutput, .6);
-            }
-            if (_limelight.getY()>3.3 && _limelight.getY()<6.6) {
-                _shootymotor.set(ControlMode.PercentOutput, .3);
-            }
-        }
+        
     }
 }
