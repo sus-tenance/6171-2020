@@ -18,6 +18,7 @@ public class Shooting {
     }
 
     public void ShootingMAIN() {
+        //lol
         while (oi.getX()) {
             if (_limelight.getY()>10) {
                 _shootymotor.set(ControlMode.PercentOutput, 1);
