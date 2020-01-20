@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI 
 {
 	//constants
-	private static final double oi_joystickDeadband = 0.2;	//	Modify this here to change the joystick deadband in getDrive and saitek methods.
+	private double oi_joystickDeadband = 0.2;	//	Modify this here to change the joystick deadband in getDrive and saitek methods.
 	
 	//Main xbox controller
 	public static final int LEFT_X =0;
@@ -242,5 +242,9 @@ public class OI
 	protected double joystickSmoother(final double value) { // Smooths out joystick values such that sensitivity is
 															// lower towards the bottom end.
 		return Math.abs(value)*value;
+	}
+
+	public void setOIDeadband(int oiDB) {
+		oi_joystickDeadband = oiDB;
 	}
 }
