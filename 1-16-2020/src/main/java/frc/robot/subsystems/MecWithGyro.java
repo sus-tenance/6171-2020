@@ -14,13 +14,13 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 public class MecWithGyro {
     private OI oi;
     private CANSparkMax m_frontRightMotor;
-    private static final int m_frontRightMotorID = 0;
+    private static final int m_frontRightMotorID = 5;
     private CANSparkMax m_rearRightMotor;
-    private static final int m_rearRightMotorID = 1;
+    private static final int m_rearRightMotorID = 2;
     private CANSparkMax m_frontLeftMotor;
-    private static final int m_frontLeftMotorID = 2;
+    private static final int m_frontLeftMotorID = 1;
     private CANSparkMax m_rearLeftMotor;
-    private static final int m_rearLeftMotorID = 3;
+    private static final int m_rearLeftMotorID = 4;
 
     private final ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
 
