@@ -26,7 +26,7 @@ public class MecWithGyro {
 
     private MecanumDrive m_robotDrive;
 
-    //  private double _strafe, _drive, _turn;
+    //  private double _strafe, _drive, _turn;  //  Uncomment these to use manual mecanum math
 
     //  private double _lf, _lb, _rf, _rb;
 
@@ -39,6 +39,9 @@ public class MecWithGyro {
         m_frontLeftMotor = new CANSparkMax(m_frontLeftMotorID, MotorType.kBrushless);
         m_rearLeftMotor = new CANSparkMax(m_rearLeftMotorID, MotorType.kBrushless);
 
+        m_frontRightMotor.setInverted(true);
+        m_rearRightMotor.setInverted(true);
+
         m_robotDrive = new MecanumDrive(m_frontRightMotor, m_rearRightMotor, m_frontLeftMotor, m_rearLeftMotor);
         m_robotDrive.setMaxOutput(_POWERMAX);
 
@@ -48,7 +51,7 @@ public class MecWithGyro {
     public void MecanumMAIN() {
         m_robotDrive.driveCartesian(oi.getDriveRightY(), oi.getDriveRightX(), oi.getDriveLeftX(), m_gyro.getAngle());
 
-        /*
+        /*  This is manual mecanum math if you'd like...
             _strafe = oi.getDriveRightX();
             _drive = oi.getDriveRightY();
             _turn = oi.getDriveLeftX();
