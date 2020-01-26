@@ -11,7 +11,7 @@ import frc.robot.OI;
 import frc.robot.subsystems.MecWithGyro;
 import frc.robot.subsystems.Shooting;
 import frc.robot.subsystems.Limelight;
-import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Auton;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
   private MecWithGyro m_drive;
   private Shooting m_shooter;
   private Limelight m_limelight;
-  private Timer m_timer;
+  private Auton m_autonomous;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -50,7 +50,8 @@ public class Robot extends TimedRobot {
     m_drive = new MecWithGyro();
     m_shooter = new Shooting();
     m_limelight = new Limelight();
-    m_timer = new Timer();
+    m_autonomous = new Auton();
+
     m_drive.MecanumINIT();
     m_shooter.ShootingINIT();
   }
@@ -97,7 +98,7 @@ public class Robot extends TimedRobot {
       case kDefaultAuto:
       default:
         // Put default auto code here
-        m_autonomous();
+        m_autonomous.Autonomous(m_drive, m_shooter, m_limelight);
         break;
     }
   }
@@ -117,79 +118,4 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
   }
 
-  private void m_autonomous() { //  This method we made runs autonomous functions.
-   /*
-    * PSEUDOCODE:
-    * 
-    * get gyro angle at start for north ref
-    * 
-    * if tx is positive
-    *  turn right until 0
-    * else if tx is negative
-    *  turn left until 0
-    * 
-    * shoot
-    * 
-    * while gyro angle is not equal to what the starting angle was
-    *  turn in the opposite direction that you used to turn to shoot
-    * 
-    * back up a bit
-    * 
-    * done
-    * 
-    */
-    double initialAngle = m_drive.autonGetGyro();
-    String firstTurn = "";
-
-    while(applyDeadband(m_limelight.getX(), 3) != 0){
-      if (applyDeadband(m_limelight.getX(), 3) > 0) {
-        m_drive.autonTurnLeft();
-        firstTurn = "Left";
-      } else if (applyDeadband(m_limelight.getX(), 3) < 0) {
-        m_drive.autonTurnRight();
-        firstTurn = "Right";
-      }
-    }
-
-    m_timer.start();
-    while(m_timer.get() < 5)
-      m_shooter.autonShooting();
-    m_timer.stop();
-
-    while(applyDeadband(m_drive.autonGetGyro(), 10) != initialAngle) {
-      switch(firstTurn){
-        case "Left":
-          m_drive.autonTurnRight();
-          break;
-        case "Right":
-          m_drive.autonTurnLeft();
-          break;
-      }
-    }
-
-    m_timer.start();
-    while(m_timer.get() < 5)
-      m_drive.autonMoveBack();     
-    m_timer.stop();
-
-  }
-
-  /** *** COPIED FROM WPILIB: https://github.com/wpilibsuite/allwpilib/blob/master/wpilibj/src/main/java/edu/wpi/first/wpilibj/drive/RobotDriveBase.java ***
-	 * Returns 0.0 if the given value is within the specified range around zero. The remaining range
-	 * between the deadband and 1.0 is scaled from 0.0 to 1.0.
-	 *
-	 * @param value    value to clip
-	 * @param deadband range around zero
-	 */
-	protected double applyDeadband(final double value, final double deadband) {
-		if (Math.abs(value) > deadband) {
-			if (value > 0.0) {
-				return (value - deadband) / (1.0 - deadband);
-			} else {
-				return (value + deadband) / (1.0 - deadband);
-			}
-			} else {
-				return 0.0;
-			}
-	}
 }
