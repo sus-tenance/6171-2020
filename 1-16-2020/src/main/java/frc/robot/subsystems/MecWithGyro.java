@@ -22,7 +22,7 @@ public class MecWithGyro {
     private CANSparkMax m_rearLeftMotor;
     private static final int m_rearLeftMotorID = 4;
 
-    private final ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
+    private ADXRS450_Gyro m_gyro;
 
     private MecanumDrive m_robotDrive;
 
@@ -30,7 +30,7 @@ public class MecWithGyro {
 
     //  private double _lf, _lb, _rf, _rb;
 
-    private final double _POWERMAX = 0.3;
+    private final double _POWERMAX = 0.1;
 
     public void MecanumINIT() {
         oi = new OI();
@@ -45,11 +45,12 @@ public class MecWithGyro {
         m_robotDrive = new MecanumDrive(m_frontRightMotor, m_rearRightMotor, m_frontLeftMotor, m_rearLeftMotor);
         m_robotDrive.setMaxOutput(_POWERMAX);
 
+        m_gyro = new ADXRS450_Gyro();
         m_gyro.calibrate();
     }
 
     public void MecanumMAIN() {
-        m_robotDrive.driveCartesian(oi.getDriveRightY(), oi.getDriveRightX(), oi.getDriveLeftX(), m_gyro.getAngle());
+        m_robotDrive.driveCartesian(oi.getDriveRightX(), oi.getDriveRightY(), oi.getDriveLeftX(), m_gyro.getAngle());
 
         /*  This is manual mecanum math if you'd like...
             _strafe = oi.getDriveRightX();
