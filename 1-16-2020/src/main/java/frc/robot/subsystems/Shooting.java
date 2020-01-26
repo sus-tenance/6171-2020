@@ -35,6 +35,10 @@ public class Shooting {
         }
     }
     
+    public void autonShooting () {
+        _shootyMotor.set(ControlMode.PercentOutput, 1);
+    }
+
     private double map(final double x, final double in_min, final double in_max, final double out_min, final double out_max) {  //  Copied from the Arduino map() function
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }

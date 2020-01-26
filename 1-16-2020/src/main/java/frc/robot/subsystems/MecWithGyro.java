@@ -63,4 +63,20 @@ public class MecWithGyro {
         */
 
         }
+
+        public double autonGetGyro () {
+            return m_gyro.getAngle();
+        }
+
+        public void autonTurnLeft () {
+            m_robotDrive.driveCartesian(0, 0, -1);
+        }
+        
+        public void autonTurnRight () {
+            m_robotDrive.driveCartesian(0, 0, 1);
+        }
+
+        public void autonMoveBack () {
+            m_robotDrive.driveCartesian(0, -1, 0);
+        }
     }
