@@ -6,10 +6,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.OI;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-//  import edu.wpi.first.wpilibj.SPI;   Check if robot correctly functions with or without this import...
 
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-//  import edu.wpi.first.wpiutil.math.MathUtil;
 
 public class MecWithGyro {
     private OI oi;
