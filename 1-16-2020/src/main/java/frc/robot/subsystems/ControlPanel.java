@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PWMSparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.robot.OI;
 
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorMatchResult;
@@ -18,7 +17,6 @@ public class ControlPanel {
 
   private final ColorMatch m_colorMatcher = new ColorMatch();
 
-  private OI oi;
   private PWMSparkMax m_rotationControlMotor;
   private static final int m_rotationControlMotorID = 4;
 
@@ -68,7 +66,6 @@ public class ControlPanel {
   }
 
   public void RotationControlINIT() {
-    oi = new OI();
     m_rotationControlMotor = new PWMSparkMax(m_rotationControlMotorID);
     m_colorMatcher.addColorMatch(BlueTarget);
     m_colorMatcher.addColorMatch(GreenTarget);
@@ -76,7 +73,7 @@ public class ControlPanel {
     m_colorMatcher.addColorMatch(YellowTarget);   
   }
   
-  public void RotationControlMAIN() {
+  public void RotationControlMAIN(boolean getBoxA) {  //  Pass oi.getBoxA to this
     Color detectedColor = m_colorSensor.getColor();
     Color detectedStartColor = m_colorSensor.getColor();
     ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedStartColor);
@@ -86,7 +83,7 @@ public class ControlPanel {
     while (i < 7) {
       detectedColor = m_colorSensor.getColor();
       match = m_colorMatcher.matchClosestColor(detectedColor);
-      if (match.color == detectedStartColor) i++; else if (oi.getBoxA()) break;
+      if (match.color == detectedStartColor) i++; else if (getBoxA) break;
     }
     m_rotationControlMotor.set(0);
   }

@@ -5,10 +5,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.OI;
 
 public class Drive {
-    private OI oi;
     private CANSparkMax m_frontRightMotor;
     private static final int m_frontRightMotorID = 0;
     private CANSparkMax m_rearRightMotor;
@@ -24,8 +22,7 @@ public class Drive {
     public final double POWER = 0.02;
 	public final double DOWPOW = 0.12;
 
-    public void MecanumINIT() {     
-        oi = new OI();
+    public void MecanumINIT() {
         m_frontRightMotor = new CANSparkMax(m_frontRightMotorID, MotorType.kBrushless);
         m_rearRightMotor = new CANSparkMax(m_rearRightMotorID, MotorType.kBrushless);
         m_frontLeftMotor = new CANSparkMax(m_frontLeftMotorID, MotorType.kBrushless);
@@ -35,15 +32,17 @@ public class Drive {
         m_robotDrive.setMaxOutput(.3);
     }
 
-    public void MecanumMAIN() {
-        m_robotDrive.driveCartesian(oi.getDriveRightY()*.5, oi.getDriveRightX()*.5, oi.getDriveLeftX());
+    public void MecanumMAIN(double driveRightY, double driveRightX, double driveLeftX) {
+        m_robotDrive.driveCartesian(driveRightY*.5, driveRightX*.5, driveLeftX);
 
-        if (oi.getDriveRightTrigger()>1) {
-            m_robotDrive.setMaxOutput(.3);
-        }
-        if (oi.getDriveLeftTrigger()>1) {
-            m_robotDrive.setMaxOutput(.2);
-        }
+        /*  Not sure setting max output works during main...
+            if (oi.getDriveRightTrigger()>1) {
+                m_robotDrive.setMaxOutput(.3);
+            }
+            if (oi.getDriveLeftTrigger()>1) {
+                m_robotDrive.setMaxOutput(.2);
+            }
+        */
         }
 
         public void LLCenter() {

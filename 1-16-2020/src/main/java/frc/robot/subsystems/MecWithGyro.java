@@ -3,14 +3,11 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import frc.robot.OI;
-
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
 public class MecWithGyro {
-    private OI oi;
     private CANSparkMax m_frontRightMotor;
     private static final int m_frontRightMotorID = 5;
     private CANSparkMax m_rearRightMotor;
@@ -31,7 +28,6 @@ public class MecWithGyro {
     private final double _POWERMAX = 0.1;
 
     public void MecanumINIT() {
-        oi = new OI();
         m_frontRightMotor = new CANSparkMax(m_frontRightMotorID, MotorType.kBrushless);
         m_rearRightMotor = new CANSparkMax(m_rearRightMotorID, MotorType.kBrushless);
         m_frontLeftMotor = new CANSparkMax(m_frontLeftMotorID, MotorType.kBrushless);
@@ -47,8 +43,8 @@ public class MecWithGyro {
         m_gyro.calibrate();
     }
 
-    public void MecanumMAIN() {
-        m_robotDrive.driveCartesian(oi.getDriveRightX(), oi.getDriveRightY(), oi.getDriveLeftX(), m_gyro.getAngle());
+    public void MecanumMAIN(double getDriveRightY, double getDriveRightX, double getDriveLeftX) {
+        m_robotDrive.driveCartesian(getDriveRightY, getDriveRightX, getDriveLeftX, m_gyro.getAngle());
 
         /*  This is manual mecanum math if you'd like...
             _strafe = oi.getDriveRightX();

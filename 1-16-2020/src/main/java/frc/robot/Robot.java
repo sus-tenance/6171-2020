@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.MecWithGyro;
+import frc.robot.OI;
 
 
 /**
@@ -25,7 +26,7 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
+  private OI m_oi;
   private MecWithGyro m_drive;
 
   /**
@@ -38,6 +39,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
+    m_oi = new OI();
     m_drive = new MecWithGyro();
     m_drive.MecanumINIT();
   }
@@ -93,7 +95,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    m_drive.MecanumMAIN();
+    m_drive.MecanumMAIN(m_oi.getDriveRightX(), m_oi.getDriveRightY(), m_oi.getDriveLeftX());
   }
 
   /**

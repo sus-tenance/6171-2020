@@ -5,11 +5,7 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import frc.robot.OI;
-
 public class Shooting {
-
-    private OI oi;
     private TalonSRX _shootyMotor;
     private static final int _shootyMotorID = 0;
 
@@ -19,9 +15,9 @@ public class Shooting {
         _shootyMotor = new TalonSRX(_shootyMotorID);
     }
 
-    public void ShootingMAIN() {
+    public void ShootingMAIN(boolean getX) {
         //if this is here it worked
-        if (oi.getX()) {
+        if (getX) {
             /*
             if (_limelight.getY() > 10) {
                 _shootyMotor.set(ControlMode.PercentOutput, 1);
