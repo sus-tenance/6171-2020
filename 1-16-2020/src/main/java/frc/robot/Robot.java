@@ -48,13 +48,13 @@ public class Robot extends TimedRobot {
 
     m_oi = new OI();
     m_drive = new MecWithGyro();
-    m_shooter = new Shooting();
-    m_limelight = new Limelight();
-    m_autonomous = new Auton();
+    //m_shooter = new Shooting();
+    //m_limelight = new Limelight();
+    //m_autonomous = new Auton();
 
     m_drive.MecanumINIT();
-    m_shooter.ShootingINIT();
-    m_autonomous.AutonomousStartTimer();
+    //m_shooter.ShootingINIT();
+    //m_autonomous.AutonomousStartTimer();
   }
 
   /**
@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
       case kDefaultAuto:
       default:
         // Put default auto code here
-        m_autonomous.AutonomousMain(m_drive, m_shooter, m_limelight);
+        //m_autonomous.AutonomousMain(m_drive, m_shooter, m_limelight);
         break;
     }
   }

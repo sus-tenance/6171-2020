@@ -42,7 +42,7 @@ public class MecWithGyro {
     }
 
     public void MecanumMAIN(double getDriveRightY, double getDriveRightX, double getDriveLeftX) {
-        m_robotDrive.driveCartesian(getDriveRightY, getDriveRightX, getDriveLeftX, m_gyro.getAngle());
+        m_robotDrive.driveCartesian(getDriveRightX, getDriveRightY, getDriveLeftX/*, m_gyro.getAngle()*/);
 
         /*  This is manual mecanum math if you'd like...
             _strafe = oi.getDriveRightX();
