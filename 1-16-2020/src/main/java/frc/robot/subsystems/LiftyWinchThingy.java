@@ -12,8 +12,8 @@ public class LiftyWinchThingy {
         _liftyMotor = new TalonSRX(RobotMap.liftyMotorID);
     }
 
-    public void LiftyWinchThingyMAIN(boolean getY) {    //  pass m_oi.getY to this
-        if (getY) _liftyMotor.set(ControlMode.PercentOutput, 1);
+    public void LiftyWinchThingyMAIN(boolean getYButton) {    //  pass m_oi.getY to this
+        if (getYButton) _liftyMotor.set(ControlMode.PercentOutput, 1);
         else _liftyMotor.set(ControlMode.PercentOutput, 0);
     }
 }

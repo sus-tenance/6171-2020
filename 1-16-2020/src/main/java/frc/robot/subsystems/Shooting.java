@@ -16,9 +16,9 @@ public class Shooting {
         _shootyMotor = new TalonSRX(RobotMap.shootyMotorID);
     }
 
-    public void ShootingMAIN(boolean getX) {
-        //if this is here it worked
-        if (getX) {
+    public void ShootingMAIN(boolean getXButton) {
+        
+        if (getXButton) {
             /*
             if (_limelight.getY() > 10) {
                 _shootyMotor.set(ControlMode.PercentOutput, 1);
