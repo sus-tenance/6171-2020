@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import frc.robot.RobotMap;
+
 import edu.wpi.first.wpiutil.math.MathUtil;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -7,12 +9,11 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class Shooting {
     private TalonSRX _shootyMotor;
-    private static final int _shootyMotorID = 0;
 
     private Limelight _limelight;
 
     public void ShootingINIT() {
-        _shootyMotor = new TalonSRX(_shootyMotorID);
+        _shootyMotor = new TalonSRX(RobotMap.shootyMotorID);
     }
 
     public void ShootingMAIN(boolean getX) {

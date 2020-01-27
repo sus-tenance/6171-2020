@@ -3,12 +3,13 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import frc.robot.RobotMap;
+
 public class LiftyWinchThingy {
     private TalonSRX _liftyMotor;
-    private static final int _liftyMotorID = 0;
 
     public void LiftyWinchThingyINIT() {
-        _liftyMotor = new TalonSRX(_liftyMotorID);
+        _liftyMotor = new TalonSRX(RobotMap.liftyMotorID);
     }
 
     public void LiftyWinchThingyMAIN(boolean getY) {    //  pass m_oi.getY to this

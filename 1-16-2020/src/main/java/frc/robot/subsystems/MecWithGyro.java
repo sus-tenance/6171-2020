@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import frc.robot.RobotMap;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -9,13 +11,9 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
 public class MecWithGyro {
     private CANSparkMax m_frontRightMotor;
-    private static final int m_frontRightMotorID = 5;
     private CANSparkMax m_rearRightMotor;
-    private static final int m_rearRightMotorID = 2;
     private CANSparkMax m_frontLeftMotor;
-    private static final int m_frontLeftMotorID = 1;
     private CANSparkMax m_rearLeftMotor;
-    private static final int m_rearLeftMotorID = 4;
 
     private ADXRS450_Gyro m_gyro;
 
@@ -28,10 +26,10 @@ public class MecWithGyro {
     private final double _POWERMAX = 0.1;
 
     public void MecanumINIT() {
-        m_frontRightMotor = new CANSparkMax(m_frontRightMotorID, MotorType.kBrushless);
-        m_rearRightMotor = new CANSparkMax(m_rearRightMotorID, MotorType.kBrushless);
-        m_frontLeftMotor = new CANSparkMax(m_frontLeftMotorID, MotorType.kBrushless);
-        m_rearLeftMotor = new CANSparkMax(m_rearLeftMotorID, MotorType.kBrushless);
+        m_frontRightMotor = new CANSparkMax(RobotMap.frontRightMotorID, MotorType.kBrushless);
+        m_rearRightMotor = new CANSparkMax(RobotMap.rearRightMotorID, MotorType.kBrushless);
+        m_frontLeftMotor = new CANSparkMax(RobotMap.frontLeftMotorID, MotorType.kBrushless);
+        m_rearLeftMotor = new CANSparkMax(RobotMap.rearLeftMotorID, MotorType.kBrushless);
 
         m_frontRightMotor.setInverted(true);
         m_rearRightMotor.setInverted(true);
@@ -64,19 +62,11 @@ public class MecWithGyro {
 
         }
 
+        public void autonMoveCartesian (double ySpeed, double xSpeed, double zRotation) {
+            m_robotDrive.driveCartesian(ySpeed, xSpeed, zRotation, 0.0);
+        }
+
         public double autonGetGyro () {
             return m_gyro.getAngle();
-        }
-
-        public void autonTurnLeft () {
-            m_robotDrive.driveCartesian(0, 0, -1);
-        }
-        
-        public void autonTurnRight () {
-            m_robotDrive.driveCartesian(0, 0, 1);
-        }
-
-        public void autonMoveBack () {
-            m_robotDrive.driveCartesian(0, -1, 0);
         }
     }
