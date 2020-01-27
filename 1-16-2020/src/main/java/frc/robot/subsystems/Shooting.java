@@ -9,6 +9,7 @@ public class Shooting {
 
     private TalonSRX _shootyMotor;
     private Limelight _limelight;
+    private double distanceToTarget;
 
     public void ShootingINIT() {
         _shootyMotor = new TalonSRX(RobotMap.shootyMotorID);
@@ -20,32 +21,28 @@ public class Shooting {
     
     public void shootWithLL () {
         /*
-            if (_limelight.getY() > 10) {
-                _shootyMotor.set(ControlMode.PercentOutput, 1);
-            }
-            else if (_limelight.getY() > 6.6 && _limelight.getY() < 10) { 
-                _shootyMotor.set(ControlMode.PercentOutput, .6);
-            }
-            if (_limelight.getY() > 3.3 && _limelight.getY() < 6.6) {
-                _shootyMotor.set(ControlMode.PercentOutput, .3);
-            }*/
+            The values below should be determined experimentally.
 
+            We'll need to figure out what distance means in motor values.
+
+            Also, for future reference: TA is exponentially related to distance from
+            target... not linearly, and it's reportedly inaccurate. Use TY instead, that's okay.
+
+            And this: https://docs.limelightvision.io/en/latest/cs_estimating_distance.html#using-a-fixed-angle-camera
+            
+            d = (actualHeightOfTarget-LLHeightFromFloor) / tan(ty + angleBetweenLLAndFloor)
+
+            For us, actualHeightOfTarget = 98.18 in to the 3 pointer shot
+            and LLHeightFromFloor and angleBetweenLLAndFloor are based on the robot.
+        */
+
+        distanceToTarget = (0.00 - 0.00) / Math.tan(_limelight.getY() - 0.00);  //  0.00 for placeholders
+        _shootyMotor.set(ControlMode.Velocity, 0.00*distanceToTarget); //  0.00 for placeholder.
             /*
-                The values below should be determined experimentally.
-
-                We'll need to figure out what distance means in motor values.
-
-                Also, for future reference: TA is exponentially related to distance from
-                target... not linearly, and it's reportedly inaccurate. Use TY instead, that's okay.
-
-                And this: https://docs.limelightvision.io/en/latest/cs_estimating_distance.html#using-a-fixed-angle-camera
-                
+              Need to find relationship between actual distance and motors.
+              This is easy though, like Mechanical can take care of
+              finding out what distance needs what power. Hopefully it's linear,
+              if not, we can deal with that in code...
             */
-
-        _shootyMotor.set(ControlMode.Velocity, map(_limelight.getY(), 3.3, 10, 0.3, 1));
-    }
-
-    private double map(final double x, final double in_min, final double in_max, final double out_min, final double out_max) {
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;    //  Copied from the Arduino map() function
     }
 }
