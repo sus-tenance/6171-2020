@@ -7,34 +7,34 @@ import frc.robot.subsystems.Limelight;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Auton {
-    
-    private double limelightGetXTolerance = 10;
+    private double limelightGetXTolerance = 10; //  Both these tolerance values are in degrees.
     private double gyroTolerance = 10;
+    
     private MecWithGyro autoDrive;
     private Shooting autoShooter;
     private Limelight autoLimelight;
-    private Timer _timer;
+    private Timer timer;
 
-    public void Autonomous(MecWithGyro drivetrainObject, Shooting shooterObject, Limelight limelightObject) { //  This method runs autonomous functions.
+    public void AutonomousStartTimer() {
+        timer.reset();
+        timer.start();
+    }
+
+    public void AutonomousMain(MecWithGyro drivetrainObject, Shooting shooterObject, Limelight limelightObject) { //  This method runs autonomous functions.
         autoDrive = drivetrainObject;
         autoShooter = shooterObject;
         autoLimelight = limelightObject;
-    
-        while (Math.abs(autoLimelight.getX()) > limelightGetXTolerance) {
-            autoDrive.autonMoveCartesian(0, 0, autoLimelight.getX()/-27);    //  getX ranges from -27 to 27 degrees
-        }
 
-        _timer.start();
-        while(_timer.get() < 5) autoShooter.autonShooting();
-        _timer.stop();
-        _timer.reset();
-    
-        while(Math.abs(autoDrive.autonGetGyro()) > gyroTolerance) {
-            autoDrive.autonMoveCartesian(0, 0, autoDrive.autonGetGyro()/360);   //  getGyro is 0 to 360 in a clockwise circle, negative is ccw
-        }
-    
-        _timer.start();
-        while(_timer.get() < 5) autoDrive.autonMoveCartesian(0, -1, 0);
-        _timer.stop();    
-    }    
-}
+        if (timer.get() <= 3 && Math.abs(autoLimelight.getX()) > limelightGetXTolerance)
+            autoDrive.autonMoveCartesian(0, 0, autoLimelight.getX()/-27);    //  getX ranges from -27 to 27 degrees. This faces the robot to the LL target.
+
+        else if (timer.get() <= 6) 
+            autoShooter.shootWithLL();    //  Shoots for the next three seconds.
+
+        else if (timer.get() <= 9 && Math.abs(autoDrive.autonGetGyro()) > gyroTolerance)
+            autoDrive.autonMoveCartesian(0, 0, autoDrive.autonGetGyro()/360);   //  getGyro's circle has 360 degrees going clockwise.  This makes the robot face the wall.
+
+        else if (timer.get() <= 15)
+            autoDrive.autonMoveCartesian(0, -1, 0); //  Back past the init line
+    }
+}    

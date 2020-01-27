@@ -54,6 +54,7 @@ public class Robot extends TimedRobot {
 
     m_drive.MecanumINIT();
     m_shooter.ShootingINIT();
+    m_autonomous.AutonomousStartTimer();
   }
 
   /**
@@ -98,7 +99,7 @@ public class Robot extends TimedRobot {
       case kDefaultAuto:
       default:
         // Put default auto code here
-        m_autonomous.Autonomous(m_drive, m_shooter, m_limelight);
+        m_autonomous.AutonomousMain(m_drive, m_shooter, m_limelight);
         break;
     }
   }
