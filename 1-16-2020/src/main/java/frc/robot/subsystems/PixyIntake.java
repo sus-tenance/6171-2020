@@ -10,6 +10,8 @@ import frc.robot.subsystems.MecWithGyro;
 
 
 public class PixyIntake {
+
+	private double pixyTolerance = 3;
    
     private static Pixy2 pixy;
 
@@ -22,9 +24,8 @@ public class PixyIntake {
     }
 
     public void PixyMain (boolean getXButton) {
-        if (getXButton) {
-            
-        }
+		Block biggestBlock = getBiggestBlock();
+		if (getXButton && Math.abs(biggestBlock.getX()) > pixyTolerance) pixyDrive.autonMoveCartesian(biggestBlock.getX()/0, biggestBlock.getY()/0, biggestBlock.getX()/0);	//	This would play out weird in movenment. I also don't know what the getX ranges from to scale it... 0 for placeholder.
     }
 
     public static Block getBiggestBlock() { //  Modified from https://github.com/PseudoResonance/Pixy2JavaAPI/wiki/Using-the-API#finding-the-biggest-target-in-the-frame

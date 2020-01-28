@@ -9,9 +9,9 @@ package frc.robot;
 
 import frc.robot.OI;
 import frc.robot.subsystems.MecWithGyro;
-//import frc.robot.subsystems.Shooting;
-//import frc.robot.subsystems.Limelight;
-//import frc.robot.Auton;
+import frc.robot.subsystems.Shooting;
+import frc.robot.subsystems.Limelight;
+import frc.robot.Auton;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -32,9 +32,9 @@ public class Robot extends TimedRobot {
   
   private OI m_oi;
   private MecWithGyro m_drive;
-  //private Shooting m_shooter;
-  //private Limelight m_limelight;
-  //private Auton m_autonomous;
+  private Shooting m_shooter;
+  private Limelight m_limelight;
+  private Auton m_autonomous;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -48,13 +48,13 @@ public class Robot extends TimedRobot {
 
     m_oi = new OI();
     m_drive = new MecWithGyro();
-    //m_shooter = new Shooting();
-    //m_limelight = new Limelight();
-    //m_autonomous = new Auton();
+    m_shooter = new Shooting();
+    m_limelight = new Limelight();
+    m_autonomous = new Auton();
 
     m_drive.MecanumINIT();
-    //m_shooter.ShootingINIT();
-    //m_autonomous.AutonomousStartTimer();
+    m_shooter.ShootingINIT();
+    m_autonomous.AutonomousStartTimer();
   }
 
   /**
@@ -99,7 +99,7 @@ public class Robot extends TimedRobot {
       case kDefaultAuto:
       default:
         // Put default auto code here
-        //m_autonomous.AutonomousMain(m_drive, m_shooter, m_limelight);
+        m_autonomous.AutonomousMain(m_drive, m_shooter, m_limelight);
         break;
     }
   }
@@ -110,6 +110,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     m_drive.MecanumMAIN(m_oi.getDriveLeftX(), m_oi.getDriveLeftY(), m_oi.getDriveRightX());
+    m_shooter.shootWithLL(m_oi.getA());
   }
 
   /**
