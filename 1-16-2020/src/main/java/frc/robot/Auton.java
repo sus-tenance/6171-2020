@@ -7,8 +7,8 @@ import frc.robot.subsystems.Limelight;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Auton {
-    private double limelightGetXTolerance = 10; //  Both these tolerance values are in degrees.
-    private double gyroTolerance = 10;
+    private double limelightGetXTolerance = 3; //  Both these tolerance values are in degrees.
+    private double gyroTolerance = 3;   //  Consider a ± sign in front of them...
     
     private MecWithGyro autoDrive;
     private Shooting autoShooter;

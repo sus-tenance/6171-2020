@@ -5,6 +5,8 @@ import frc.robot.RobotMap;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Shooting {
 
     private TalonSRX _shootyMotor;
@@ -16,8 +18,7 @@ public class Shooting {
     }
 
     public void ShootingMAIN(boolean getXButton) {
-        if (getXButton) shootWithLL(true);
-        else shootWithLL(false);
+        shootWithLL(getXButton);
     }
     
     public void shootWithLL (boolean toggle) {
@@ -38,6 +39,8 @@ public class Shooting {
         */
 
         distanceToTarget = (0.00 - 0.00) / Math.tan(_limelight.getY() - 0.00);  //  0.00 for placeholders
+        SmartDashboard.putNumber("Estimated distance to target", distanceToTarget);
+
         if (toggle) _shootyMotor.set(ControlMode.Velocity, 0.00*distanceToTarget); //  0.00 for placeholder.
             /*
               Need to find relationship between actual distance and motors.
