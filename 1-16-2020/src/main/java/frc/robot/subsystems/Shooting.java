@@ -16,10 +16,11 @@ public class Shooting {
     }
 
     public void ShootingMAIN(boolean getXButton) {
-        if (getXButton) shootWithLL();
+        if (getXButton) shootWithLL(true);
+        else shootWithLL(false);
     }
     
-    public void shootWithLL () {
+    public void shootWithLL (boolean toggle) {
         /*
             The values below should be determined experimentally.
 
@@ -37,7 +38,7 @@ public class Shooting {
         */
 
         distanceToTarget = (0.00 - 0.00) / Math.tan(_limelight.getY() - 0.00);  //  0.00 for placeholders
-        _shootyMotor.set(ControlMode.Velocity, 0.00*distanceToTarget); //  0.00 for placeholder.
+        if (toggle) _shootyMotor.set(ControlMode.Velocity, 0.00*distanceToTarget); //  0.00 for placeholder.
             /*
               Need to find relationship between actual distance and motors.
               This is easy though, like Mechanical can take care of
