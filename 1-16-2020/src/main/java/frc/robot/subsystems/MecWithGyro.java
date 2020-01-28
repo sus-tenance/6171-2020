@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import frc.robot.RobotMap;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
@@ -33,6 +34,13 @@ public class MecWithGyro {
 
         m_frontRightMotor.setInverted(true);
         m_rearRightMotor.setInverted(true);
+        m_rearLeftMotor.setInverted(false);
+        m_frontLeftMotor.setInverted(false);
+
+        m_frontLeftMotor.setIdleMode(IdleMode.kBrake);
+        m_rearLeftMotor.setIdleMode(IdleMode.kBrake);
+        m_frontRightMotor.setIdleMode(IdleMode.kBrake);
+        m_rearRightMotor.setIdleMode(IdleMode.kBrake);
 
         m_robotDrive = new MecanumDrive(m_frontRightMotor, m_rearRightMotor, m_frontLeftMotor, m_rearLeftMotor);
         m_robotDrive.setMaxOutput(_POWERMAX);
@@ -41,8 +49,8 @@ public class MecWithGyro {
         m_gyro.calibrate();
     }
 
-    public void MecanumMAIN(double getDriveRightY, double getDriveRightX, double getDriveLeftX) {
-        m_robotDrive.driveCartesian(getDriveRightX, getDriveRightY, getDriveLeftX/*, m_gyro.getAngle()*/);
+    public void MecanumMAIN(double getDriveLeftX, double getDriveLeftY, double getDriveRightX) {
+        m_robotDrive.driveCartesian(getDriveLeftX, getDriveLeftY, getDriveRightX, m_gyro.getAngle());
 
         /*  This is manual mecanum math if you'd like...
             _strafe = oi.getDriveRightX();

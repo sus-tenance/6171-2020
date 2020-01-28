@@ -9,9 +9,9 @@ package frc.robot;
 
 import frc.robot.OI;
 import frc.robot.subsystems.MecWithGyro;
-import frc.robot.subsystems.Shooting;
-import frc.robot.subsystems.Limelight;
-import frc.robot.Auton;
+//import frc.robot.subsystems.Shooting;
+//import frc.robot.subsystems.Limelight;
+//import frc.robot.Auton;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -32,9 +32,9 @@ public class Robot extends TimedRobot {
   
   private OI m_oi;
   private MecWithGyro m_drive;
-  private Shooting m_shooter;
-  private Limelight m_limelight;
-  private Auton m_autonomous;
+  //private Shooting m_shooter;
+  //private Limelight m_limelight;
+  //private Auton m_autonomous;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -109,7 +109,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    m_drive.MecanumMAIN(m_oi.getDriveRightX(), m_oi.getDriveRightY(), m_oi.getDriveLeftX());
+    m_drive.MecanumMAIN(m_oi.getDriveLeftX(), m_oi.getDriveLeftY(), m_oi.getDriveRightX());
   }
 
   /**
