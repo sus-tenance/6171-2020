@@ -10,6 +10,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.returntypes.OI;
+import frc.robot.subsystems.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,6 +25,14 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  //Classes
+  private Drivetrain m_mecanumDrivetrain = new Drivetrain();
+  private Autonomous m_autonomous = new Autonomous();
+  private Manipulator m_manipulator = new Manipulator();
+  //private Controlpanel m_controlpanel = new Controlpanel();
+  //private Climb m_climb = new Climb();
+  private OI m_oi = new OI();
 
   /**
    * This function is run when the robot is first started up and should be
@@ -72,7 +82,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     switch (m_autoSelected) {
       case kCustomAuto:
-        // Put custom auto code here
+        m_autonomous.AutonomousMode();
         break;
       case kDefaultAuto:
       default:
@@ -86,6 +96,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    m_mecanumDrivetrain.MecanumDrivetrain(m_oi.getDriveRightX(), m_oi.getDriveLeftX(), m_oi.getDriveRightY());
+    m_manipulator.ManipulatorMethod(m_oi.getBoxA(), m_oi.getBoxB());
+    //m_controlpanel.PositionControl();
+    //m_controlpanel.RotationControlMAIN(m_oi.getBoxC());
+    //m_climb.randomclimbmethodthatisundefinded
   }
 
   /**

@@ -3,8 +3,10 @@ package frc.robot;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.returntypes.Limelight;
 import frc.robot.returntypes.Robotmap;
+import frc.robot.subsystems.Manipulator;
 
 public class Drivetrain {
 
@@ -18,9 +20,27 @@ public class Drivetrain {
     //Mecanum Drivetrain
     private MecanumDrive m_robotDrive = new MecanumDrive(m_frontLeftMotor, m_rearLeftMotor, m_frontRightMotor, m_rearRightMotor);
 
+    private Manipulator m_autonomousShooting = new Manipulator();
+
+    private Limelight m_limelight = new Limelight();
+    private static double m_POWER = 0.02;
+
     public void MecanumDrivetrain(double getDriveRightY, double getDriveRightX, double getDriveLeftX) {
         //Drives the robot with controller values passed from Robot.java
         m_robotDrive.driveCartesian(getDriveRightX, getDriveLeftX, getDriveRightX);
+    }
+
+    public void MecanumAutonomous() {
+        double tx = m_limelight.getX();
+        SmartDashboard.putNumber("Drivetrain tx", tx);
+        if (tx>4 || tx<-4) { //Horizontal offset from crosshair to target (+10 degrees and -10 degress)
+            m_frontRightMotor.set(-tx*m_POWER);
+            m_rearRightMotor.set(-tx*m_POWER);
+            m_frontLeftMotor.set(tx*m_POWER);
+            m_rearLeftMotor.set(tx*m_POWER);
+        }
+        else m_autonomousShooting.AutonomousShoot();
+        
     }
 
     public void ResetMotors() {
