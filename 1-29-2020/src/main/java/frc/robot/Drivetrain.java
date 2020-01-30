@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,6 +28,7 @@ public class Drivetrain {
 
     public void MecanumDrivetrain(double getDriveRightY, double getDriveRightX, double getDriveLeftX) {
         //Drives the robot with controller values passed from Robot.java
+        setBrake(false);
         m_robotDrive.driveCartesian(getDriveRightX, getDriveLeftX, getDriveRightX);
     }
 
@@ -49,5 +51,21 @@ public class Drivetrain {
         m_rearLeftMotor.restoreFactoryDefaults();
         m_frontRightMotor.restoreFactoryDefaults();
         m_rearRightMotor.restoreFactoryDefaults();
+    }
+
+    public void setBrake(boolean trueorfalse) {
+        //Set the motor mode to either Brake or Coast
+        if (trueorfalse == true) {
+            m_frontLeftMotor.setIdleMode(IdleMode.kBrake);
+            m_rearLeftMotor.setIdleMode(IdleMode.kBrake);
+            m_frontRightMotor.setIdleMode(IdleMode.kBrake);
+            m_rearRightMotor.setIdleMode(IdleMode.kBrake);
+        }
+        else {
+            m_frontLeftMotor.setIdleMode(IdleMode.kCoast);
+            m_rearLeftMotor.setIdleMode(IdleMode.kCoast);
+            m_frontRightMotor.setIdleMode(IdleMode.kCoast);
+            m_rearRightMotor.setIdleMode(IdleMode.kCoast);
+        }
     }
 }
