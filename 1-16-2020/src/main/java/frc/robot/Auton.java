@@ -16,6 +16,7 @@ public class Auton {
     private Timer timer;
 
     public void AutonomousStartTimer() {
+        timer = new Timer();
         timer.reset();
         timer.start();
     }
