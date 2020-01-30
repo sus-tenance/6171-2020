@@ -12,7 +12,6 @@ public class Autonomous {
     public void AutonomousMode() {
         if (Timer.getMatchTime() >= m_oneSecond) {
             m_mecanum.MecanumDrivetrain(0.0, -0.3, 0.0);
-            m_mecanum.setBrake(true);
         }
         if (Timer.getMatchTime() >= m_sixMore) {
             m_mecanum.MecanumAutonomous();

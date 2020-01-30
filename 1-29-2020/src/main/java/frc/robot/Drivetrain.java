@@ -2,9 +2,11 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
+
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.returntypes.Limelight;
 import frc.robot.returntypes.Robotmap;
 import frc.robot.subsystems.Manipulator;
@@ -28,7 +30,7 @@ public class Drivetrain {
 
     public void MecanumDrivetrain(double getDriveRightY, double getDriveRightX, double getDriveLeftX) {
         //Drives the robot with controller values passed from Robot.java
-        setBrake(false);
+        setBrake(true);
         m_robotDrive.driveCartesian(getDriveRightX, getDriveLeftX, getDriveRightX);
     }
 
