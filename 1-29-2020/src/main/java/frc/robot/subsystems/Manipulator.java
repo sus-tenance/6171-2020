@@ -25,7 +25,7 @@ public class Manipulator {
         else m_outMotor.set(0); m_inMotor.set(0);
     }
 
-    //This should be called in the time we move off the init line in Autonomous.java
+    //This should be called in the time after we move off the init line in Autonomous.java
     public void AutonomousShoot() {
         m_canShoot = m_accelerometer.CanShoot();
         if (m_canShoot) {
