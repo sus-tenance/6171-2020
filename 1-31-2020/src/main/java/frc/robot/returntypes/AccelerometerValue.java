@@ -21,7 +21,7 @@ public class AccelerometerValue {
             m_canShoot = false;
         }
         //If robot is not moving m_canShoot is true
-        else if ((m_absX <= .5 && m_absY <= .5)) {
+        else if ((m_absX <= 0 && m_absY <= 0)) {
             m_canShoot = true;
         }
         return m_canShoot;

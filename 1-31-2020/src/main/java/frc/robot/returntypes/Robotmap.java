@@ -10,7 +10,7 @@ public class Robotmap {
 
     // subsystems/Manipulator.java
     public static final int m_mnipulatorINID = 0;
-    public static final int m_mnipulatorOUTID = 0;
+    public static final int m_mnipulatorOUTID = 18;
 
     // subsystems/Controlpanel.java
     public static final int m_rotationControlMotorID = 0;
