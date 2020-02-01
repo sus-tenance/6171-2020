@@ -1,14 +1,12 @@
-package frc.robot.subsystems;
+package frc.robot.returntypes;
 
 import edu.wpi.first.networktables.*;
-import frc.robot.OI;
 
 
 public class Limelight {
 
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     
-    private OI oi;
     private double x;
     private double y;
     private double a;
@@ -38,7 +36,7 @@ public class Limelight {
         return v;
     }
 
-    public void setLight() {
-        if (oi.getA()) table.getEntry("ledMode").setNumber(3); else table.getEntry("ledMode").setNumber(0);
+    public void setLight(boolean _button) {
+        if (_button) table.getEntry("ledMode").setNumber(3); else table.getEntry("ledMode").setNumber(0);
     }
 }
