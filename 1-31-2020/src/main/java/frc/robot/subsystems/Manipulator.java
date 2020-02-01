@@ -36,10 +36,5 @@ public class Manipulator {
         }
         else m_testMotor.set(ControlMode.PercentOutput, 0.0);
         */
-    }
-<<<<<<< HEAD:1-31-2020/src/main/java/frc/robot/subsystems/Manipulator.java
-    
+    }    
 }
-=======
-}
->>>>>>> xperi:1-29-2020/src/main/java/frc/robot/subsystems/Manipulator.java
