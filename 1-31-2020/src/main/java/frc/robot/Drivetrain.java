@@ -59,9 +59,9 @@ public class Drivetrain {
         m_rearRightMotor.restoreFactoryDefaults();
     }
 
-    public void setBrake(boolean trueorfalse) {
+    public void setBrake(boolean isBrake) {
         //Set the motor mode to either Brake or Coast
-        if (trueorfalse == true) {
+        if (isBrake == true) {
             m_frontLeftMotor.setIdleMode(IdleMode.kBrake);
             m_rearLeftMotor.setIdleMode(IdleMode.kBrake);
             m_frontRightMotor.setIdleMode(IdleMode.kBrake);
