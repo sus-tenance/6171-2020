@@ -7,11 +7,15 @@
 
 package frc.robot;
 
+import frc.robot.OI;
+import frc.robot.subsystems.MecWithGyro;
+import frc.robot.subsystems.Shooting;
+import frc.robot.subsystems.Limelight;
+import frc.robot.Auton;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.returntypes.OI;
-import frc.robot.subsystems.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,14 +29,12 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
-  //Classes
-  private Drivetrain m_mecanumDrivetrain = new Drivetrain();
-  private Autonomous m_autonomous = new Autonomous(m_mecanumDrivetrain);
-  private Manipulator m_manipulator = new Manipulator();
-  //private Controlpanel m_controlpanel = new Controlpanel();
-  //private Climb m_climb = new Climb();
-  private OI m_oi = new OI();
+  
+  private OI m_oi;
+  private MecWithGyro m_drive;
+  private Shooting m_shooter;
+  private Limelight m_limelight;
+  private Auton m_autonomous;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -44,7 +46,15 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    m_mecanumDrivetrain.ResetMotors();
+    m_oi = new OI();
+    m_drive = new MecWithGyro();
+    m_shooter = new Shooting();
+    m_limelight = new Limelight();
+    m_autonomous = new Auton();
+
+    m_drive.MecanumINIT();
+    m_shooter.ShootingINIT();
+    m_autonomous.AutonomousStartTimer();
   }
 
   /**
@@ -75,8 +85,6 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
-
-    m_autonomous.StartAutonomousTimer();
   }
 
   /**
@@ -91,7 +99,7 @@ public class Robot extends TimedRobot {
       case kDefaultAuto:
       default:
         // Put default auto code here
-        m_autonomous.AutonomousMode();
+        m_autonomous.AutonomousMain(m_drive, m_shooter, m_limelight);
         break;
     }
   }
@@ -101,11 +109,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    m_mecanumDrivetrain.MecanumDrivetrain(m_oi.getDriveRightX(), m_oi.getDriveRightY(), m_oi.getDriveLeftX());
-    m_manipulator.ManipulatorMethod(m_oi.getBoxA(), m_oi.getBoxB());
-    //m_controlpanel.PositionControl();
-    //m_controlpanel.RotationControlMAIN(m_oi.getBoxC());
-    //m_climb.randomclimbmethodthatisundefinded
+    m_drive.MecanumMAIN(m_oi.getDriveLeftX(), m_oi.getDriveLeftY(), m_oi.getDriveRightX());
+    m_shooter.shootWithLL(m_oi.getA());
   }
 
   /**
@@ -114,4 +119,5 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
+
 }
