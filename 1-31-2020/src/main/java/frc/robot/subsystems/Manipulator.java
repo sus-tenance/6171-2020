@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import frc.robot.returntypes.AccelerometerValue;
 import frc.robot.returntypes.Robotmap;
 
 public class Manipulator {
@@ -10,6 +11,7 @@ public class Manipulator {
     private TalonSRX m_outMotor = new TalonSRX(Robotmap.m_mnipulatorOUTID);
     //private TalonSRX m_inMotor = new TalonSRX(Robotmap.m_mnipulatorINID);
 
+    private AccelerometerValue m_accelerometer = new AccelerometerValue();
     private boolean m_canShoot;
 
     //This should be called in Robot.java when we would like to intake or shoot
