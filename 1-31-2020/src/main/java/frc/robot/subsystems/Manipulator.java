@@ -26,7 +26,7 @@ public class Manipulator {
     }
     
 
-    //This should be called in the time we move off the init line in Autonomous.java
+    //This should be called in the time after we move off the init line in Autonomous.java
     public void AutonomousShoot() {
         m_outMotor.set(ControlMode.PercentOutput, -1);
         /*
@@ -37,5 +37,9 @@ public class Manipulator {
         else m_testMotor.set(ControlMode.PercentOutput, 0.0);
         */
     }
+<<<<<<< HEAD:1-31-2020/src/main/java/frc/robot/subsystems/Manipulator.java
     
 }
+=======
+}
+>>>>>>> xperi:1-29-2020/src/main/java/frc/robot/subsystems/Manipulator.java
