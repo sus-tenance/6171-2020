@@ -7,11 +7,21 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.returntypes.OI;
-import frc.robot.subsystems.*;
+
+import frc.robot.*;
+import frc.robot.models.DriveAdjust;
+import frc.robot.models.enums.*;
+import frc.robot.outputs.drive.*;
+import frc.robot.inputs.motion.OI;
+import frc.robot.inputs.motion.PID;
+import frc.robot.inputs.vision.Limelight;
+import frc.robot.mapping.Robotmap;
+import frc.robot.outputs.drive.SparkMax;
+import frc.robot.outputs.drivetrain.ArcadeDrive;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,13 +36,17 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  //Classes
-  private Drivetrain m_mecanumDrivetrain = new Drivetrain();
-  private Autonomous m_autonomous = new Autonomous(m_mecanumDrivetrain);
-  private Manipulator m_manipulator = new Manipulator();
-  //private Controlpanel m_controlpanel = new Controlpanel();
-  //private Climb m_climb = new Climb();
-  private OI m_oi = new OI();
+  private IMotor mFrontLeft = new SparkMax(Robotmap.mFrontLeftMotorID);
+  private IMotor mRearLeft = new SparkMax(Robotmap.mRearLeftMotorID);
+  private IMotor mFrontRight = new SparkMax(Robotmap.mFrontRightMotorID);
+  private IMotor mRearRight = new SparkMax(Robotmap.mRearRightMotorID);
+
+  private OI oi;
+  private Limelight _limelight;
+
+  private SpeedControllerGroup leftGroup = new SpeedControllerGroup(mFrontLeft.GetSpeedController(), mRearLeft.GetSpeedController());
+  private SpeedControllerGroup rightGroup = new SpeedControllerGroup(mFrontRight.GetSpeedController(), mRearRight.GetSpeedController());
+  private ArcadeDrive _drivetrain = new ArcadeDrive(leftGroup, rightGroup);
 
   /**
    * This function is run when the robot is first started up and should be
@@ -43,8 +57,13 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    oi = new OI();
+    _limelight = new Limelight();
 
-    m_mecanumDrivetrain.ResetMotors();
+    mFrontLeft.SetIdleMode(RestMode.Brake);
+    mRearLeft.SetIdleMode(RestMode.Brake);
+    mFrontRight.SetIdleMode(RestMode.Brake);
+    mRearRight.SetIdleMode(RestMode.Brake);
   }
 
   /**
@@ -75,8 +94,6 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
-
-    m_autonomous.StartAutonomousTimer();
   }
 
   /**
@@ -91,7 +108,6 @@ public class Robot extends TimedRobot {
       case kDefaultAuto:
       default:
         // Put default auto code here
-        m_autonomous.AutonomousMode();
         break;
     }
   }
@@ -101,11 +117,32 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    m_mecanumDrivetrain.MecanumDrivetrain(m_oi.getDriveRightX(), m_oi.getDriveRightY(), m_oi.getDriveLeftX());
-    m_manipulator.ManipulatorMethod(m_oi.getBoxA(), m_oi.getBoxB());
-    //m_controlpanel.PositionControl();
-    //m_controlpanel.RotationControlMAIN(m_oi.getBoxC());
-    //m_climb.randomclimbmethodthatisundefinded
+    /**
+     * Set the driver type.
+     */
+    if (oi.getA())
+    {
+      _drivetrain.SetDriverType(DriverType.Limelight);
+    }
+    else if (oi.getB())
+    {
+      _drivetrain.SetDriverType(DriverType.Human);
+    }
+
+    _limelight.Update();
+
+     /**
+      * Drive the robot using limelight or the controller.
+      */
+    if (_drivetrain.GetDriverType() == DriverType.Limelight)
+    {
+      DriveAdjust driveAdjust = PID.CalculateDrive(_limelight.GetTx(), _limelight.GetTy());
+      _drivetrain.Drive(driveAdjust);
+    }
+    else
+    {
+      _drivetrain.Drive(oi);
+    }
   }
 
   /**
