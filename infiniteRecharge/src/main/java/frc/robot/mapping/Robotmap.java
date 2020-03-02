@@ -12,15 +12,25 @@ public class Robotmap {
     //INTAKE
     //TALON
     public static final int _intakeMotorID = 16;
+    
+    //HOPPER
+    //TALONS
+    public static final int _hopperLeftMotorID = 4;
+    public static final int _hopperRightMotorID = 19;
+    
+    //FEEDER
+    //TALON
+    public static final int _feederMotorID = 13;
+    
     //SHOOTER
     //SPARK MAX
-    public static final int _shooterMotorOneID = 6;
-    public static final int _shooterMotorTwoID = 2;
+    public static final int _shooterRightMotorID = 6;
+    public static final int _shooterLeftMotorID = 2;
 
     //WINCH / CLIMB
     //SPARK MAX
-    public static final int _winchLeft = 3;
-    public static final int _winchRight = 5;
+    public static final int _winchLeftMotor = 3;
+    public static final int _winchRightMotor = 5;
     //TALON
-    public static final int _slide = 12;
+    public static final int _slideMotor = 12;
 }
