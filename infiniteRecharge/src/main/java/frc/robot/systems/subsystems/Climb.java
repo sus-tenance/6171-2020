@@ -5,6 +5,10 @@ import frc.robot.systems.drive.IMotor;
 public class Climb
 {
     private IMotor _slide, _winchL, _winchR;
+
+    private double _slidePower = 0.25;
+    private double _winchPower = 0.25;
+
     public Climb(IMotor slideMotor, IMotor winchLeft, IMotor winchRight)
     {
         _slide = slideMotor;
@@ -16,24 +20,24 @@ public class Climb
 
     public void SlideUp()
     {
-        _slide.SetPower(0.25);
+        _slide.SetPower(_slidePower);
     }
 
     public void SlideDown()
     {
-        _slide.SetPower(-0.25);
+        _slide.SetPower(-_slidePower);
     }
 
     public void Unravel()
     {
-        _winchL.SetPower(0.25);
-        _winchR.SetPower(0.25);
+        _winchL.SetPower(_winchPower);
+        _winchR.SetPower(_winchPower);
     } 
 
     public void Ravel()
     {
-        _winchL.SetPower(0.25);
-        _winchR.SetPower(0.25);
+        _winchL.SetPower(_winchPower);
+        _winchR.SetPower(_winchPower);
     }
 
     public void StopMotors()

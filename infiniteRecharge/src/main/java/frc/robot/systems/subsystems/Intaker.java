@@ -1,18 +1,18 @@
 package frc.robot.systems.subsystems;
 
-import edu.wpi.first.wpilibj.SpeedController;
+import frc.robot.systems.drive.IMotor;
 
 public class Intaker
 {
-    private SpeedController _intakeMotor;
+    private IMotor _intakeMotor;
 
-    public Intaker(SpeedController intakeMotor)
+    public Intaker(IMotor intakeMotor)
     {
         _intakeMotor = intakeMotor;
     }
 
     public void Intake()
     {
-        _intakeMotor.set(1);
+        _intakeMotor.SetPower(1);
     } 
 }

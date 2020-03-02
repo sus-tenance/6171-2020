@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
    */
   private IMotor _intakeMotor = new Talon(Robotmap._intakeMotorID);
 
-  private Intaker _intake = new Intaker(_intakeMotor.GetSpeedController());
+  private Intaker _intake = new Intaker(_intakeMotor);
 
   /**
    * CLIMB/WINCH MOTORS
