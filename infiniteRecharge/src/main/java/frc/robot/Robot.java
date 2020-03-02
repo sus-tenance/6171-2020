@@ -12,18 +12,24 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import frc.robot.models.DriveAdjust;
-import frc.robot.models.enums.*;
-import frc.robot.outputs.drive.*;
-import frc.robot.inputs.motion.OI;
-import frc.robot.inputs.motion.PID;
-import frc.robot.inputs.vision.Limelight;
+import frc.robot.outputs.motion.OI;
+import frc.robot.outputs.motion.PID;
+import frc.robot.outputs.vision.Limelight;
+
 import frc.robot.mapping.Robotmap;
-import frc.robot.outputs.drivetrain.ArcadeDrive;
-import frc.robot.outputs.subsystems.Climb;
-import frc.robot.outputs.subsystems.Intaker;
-import frc.robot.outputs.subsystems.Shooter;
-import frc.robot.outputs.drivetrain.*;
+
+import frc.robot.models.DriveAdjust;
+import frc.robot.models.enums.DriverType;
+import frc.robot.models.enums.RestMode;
+
+import frc.robot.systems.drive.IMotor;
+import frc.robot.systems.drive.SparkMax;
+import frc.robot.systems.drive.Talon;
+import frc.robot.systems.drivetrain.ArcadeDrive;
+import frc.robot.systems.drivetrain.Autonomous;
+import frc.robot.systems.subsystems.Climb;
+import frc.robot.systems.subsystems.Intaker;
+import frc.robot.systems.subsystems.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -54,10 +60,10 @@ public class Robot extends TimedRobot {
   /**
    * SHOOTER MOTORS
    */
-  private IMotor _ShootingOne = new SparkMax(Robotmap._shooterMotorOneID);
-  private IMotor _ShootingTwo = new SparkMax(Robotmap._shooterMotorTwoID);
+  private IMotor _ShootingOne = new SparkMax(Robotmap._shooterLeftMotorID);
+  private IMotor _ShootingTwo = new SparkMax(Robotmap._shooterRightMotorID);
   
-  private Shooter _shooty = new Shooter(_ShootingOne, _ShootingTwo);
+  private Shooter _shoot = new Shooter(_ShootingOne, _ShootingTwo);
 
   /**
    * INTAKE MOTOR
@@ -69,9 +75,9 @@ public class Robot extends TimedRobot {
   /**
    * CLIMB/WINCH MOTORS
    */
-  private IMotor _winchLeft = new SparkMax(Robotmap._winchLeft);
-  private IMotor _winchRight = new SparkMax(Robotmap._winchRight);
-  private IMotor _slide = new Talon(Robotmap._slide);
+  private IMotor _winchLeft = new SparkMax(Robotmap._winchLeftMotor);
+  private IMotor _winchRight = new SparkMax(Robotmap._winchRightMotor);
+  private IMotor _slide = new Talon(Robotmap._slideMotor);
 
   private Climb _climb = new Climb(_slide, _winchLeft, _winchRight);
 

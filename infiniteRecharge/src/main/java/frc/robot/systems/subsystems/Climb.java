@@ -1,6 +1,6 @@
-package frc.robot.outputs.subsystems;
+package frc.robot.systems.subsystems;
 
-import frc.robot.outputs.drive.IMotor;
+import frc.robot.systems.drive.IMotor;
 
 public class Climb
 {

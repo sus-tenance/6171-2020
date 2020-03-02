@@ -1,4 +1,4 @@
-package frc.robot.inputs.vision;
+package frc.robot.outputs.vision;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

@@ -1,10 +1,10 @@
-package frc.robot.outputs.drivetrain;
+package frc.robot.systems.drivetrain;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.models.enums.*;
 import frc.robot.models.*;
-import frc.robot.inputs.motion.OI;
+import frc.robot.outputs.motion.OI;
 
 public class ArcadeDrive
 {

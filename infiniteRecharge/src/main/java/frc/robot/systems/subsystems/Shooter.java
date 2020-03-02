@@ -1,9 +1,9 @@
-package frc.robot.outputs.subsystems;
+package frc.robot.systems.subsystems;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.inputs.vision.Limelight;
-import frc.robot.outputs.drive.IMotor;
+import frc.robot.outputs.vision.Limelight;
+import frc.robot.systems.drive.IMotor;
 
 public class Shooter
 {

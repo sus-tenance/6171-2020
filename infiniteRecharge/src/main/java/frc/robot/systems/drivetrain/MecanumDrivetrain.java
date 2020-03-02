@@ -1,9 +1,9 @@
-package frc.robot.outputs.drivetrain;
+package frc.robot.systems.drivetrain;
 
-import frc.robot.inputs.motion.OI;
+import frc.robot.outputs.motion.OI;
 import frc.robot.models.enums.DriverType;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import frc.robot.outputs.drive.*;
+import frc.robot.systems.drive.*;
 
 public class MecanumDrivetrain {
     private MecanumDrive _robotDrive;

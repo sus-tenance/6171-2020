@@ -1,8 +1,8 @@
-package frc.robot.outputs.drive;
+package frc.robot.systems.drive;
 
 import frc.robot.models.enums.*;
-import frc.robot.inputs.motion.OI;
-import frc.robot.inputs.vision.Limelight;
+import frc.robot.outputs.motion.OI;
+import frc.robot.outputs.vision.Limelight;
 
 public interface IDrivetrain
 {

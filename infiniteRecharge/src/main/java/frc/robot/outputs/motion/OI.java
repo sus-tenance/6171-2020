@@ -1,4 +1,4 @@
-package frc.robot.inputs.motion;
+package frc.robot.outputs.motion;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
