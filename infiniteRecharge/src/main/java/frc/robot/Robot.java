@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import frc.robot.*;
 import frc.robot.models.DriveAdjust;
 import frc.robot.models.enums.*;
 import frc.robot.outputs.drive.*;
@@ -20,8 +19,11 @@ import frc.robot.inputs.motion.OI;
 import frc.robot.inputs.motion.PID;
 import frc.robot.inputs.vision.Limelight;
 import frc.robot.mapping.Robotmap;
-import frc.robot.outputs.drive.SparkMax;
 import frc.robot.outputs.drivetrain.ArcadeDrive;
+import frc.robot.outputs.subsystems.Climb;
+import frc.robot.outputs.subsystems.Intaker;
+import frc.robot.outputs.subsystems.Shooter;
+import frc.robot.outputs.drivetrain.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -36,17 +38,46 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
-  private IMotor mFrontLeft = new SparkMax(Robotmap.mFrontLeftMotorID);
-  private IMotor mRearLeft = new SparkMax(Robotmap.mRearLeftMotorID);
-  private IMotor mFrontRight = new SparkMax(Robotmap.mFrontRightMotorID);
-  private IMotor mRearRight = new SparkMax(Robotmap.mRearRightMotorID);
-
-  private OI oi;
-  private Limelight _limelight;
+  /**
+   * DRIVE MOTORS
+   */
+  private IMotor mFrontLeft = new SparkMax(Robotmap._frontLeftMotorID);
+  private IMotor mRearLeft = new SparkMax(Robotmap._rearLeftMotorID);
+  private IMotor mFrontRight = new SparkMax(Robotmap._frontRightMotorID);
+  private IMotor mRearRight = new SparkMax(Robotmap._rearRightMotorID);
 
   private SpeedControllerGroup leftGroup = new SpeedControllerGroup(mFrontLeft.GetSpeedController(), mRearLeft.GetSpeedController());
   private SpeedControllerGroup rightGroup = new SpeedControllerGroup(mFrontRight.GetSpeedController(), mRearRight.GetSpeedController());
+  //private MecanumDrivetrain _drivetrain = new MecanumDrivetrain(mFrontLeft, mRearLeft, mFrontRight, mRearRight);
   private ArcadeDrive _drivetrain = new ArcadeDrive(leftGroup, rightGroup);
+
+  /**
+   * SHOOTER MOTORS
+   */
+  private IMotor _ShootingOne = new SparkMax(Robotmap._shooterMotorOneID);
+  private IMotor _ShootingTwo = new SparkMax(Robotmap._shooterMotorTwoID);
+  
+  private Shooter _shooty = new Shooter(_ShootingOne, _ShootingTwo);
+
+  /**
+   * INTAKE MOTOR
+   */
+  private IMotor _intakeMotor = new Talon(Robotmap._intakeMotorID);
+
+  private Intaker _intake = new Intaker(_intakeMotor.GetSpeedController());
+
+  /**
+   * CLIMB/WINCH MOTORS
+   */
+  private IMotor _winchLeft = new SparkMax(Robotmap._winchLeft);
+  private IMotor _winchRight = new SparkMax(Robotmap._winchRight);
+  private IMotor _slide = new Talon(Robotmap._slide);
+
+  private Climb _climb = new Climb(_slide, _winchLeft, _winchRight);
+
+  private OI oi;
+  private Limelight _limelight;
+  private Autonomous _auton = new Autonomous();
 
   /**
    * This function is run when the robot is first started up and should be
@@ -94,6 +125,8 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+
+    _auton.TimerStart();
   }
 
   /**
@@ -107,7 +140,8 @@ public class Robot extends TimedRobot {
         break;
       case kDefaultAuto:
       default:
-        // Put default auto code here
+        DriveAdjust driveAdjust = PID.CalculateDrive(_limelight.GetTx(), _limelight.GetTy());
+        _drivetrain.Drive(driveAdjust);
         break;
     }
   }
@@ -120,11 +154,13 @@ public class Robot extends TimedRobot {
     /**
      * Set the driver type.
      */
-    if (oi.getA())
+
+     /*
+    if (oi.getX())
     {
       _drivetrain.SetDriverType(DriverType.Limelight);
     }
-    else if (oi.getB())
+    else*/ if (oi.getB())
     {
       _drivetrain.SetDriverType(DriverType.Human);
     }
@@ -142,6 +178,25 @@ public class Robot extends TimedRobot {
     else
     {
       _drivetrain.Drive(oi);
+      /*
+      if (oi.getY())
+      {
+        _climb.SlideUp();
+        _climb.Unravel();
+      }
+      else if (oi.getA())
+      {
+        _climb.SlideDown();
+      }
+      else if (oi.getDriveRightTrigger() > 0)
+      {
+        _climb.Ravel();
+      }
+      else
+      {
+        _climb.StopMotors();
+      }
+      */
     }
   }
 

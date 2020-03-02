@@ -2,11 +2,9 @@ package frc.robot.outputs.drivetrain;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.models.enums.*;
 import frc.robot.models.*;
 import frc.robot.inputs.motion.OI;
-import frc.robot.inputs.vision.Limelight;
 
 public class ArcadeDrive
 {
@@ -32,7 +30,7 @@ public class ArcadeDrive
 
     private void StartHumanDriver()
     {
-        this._robotDrive.setMaxOutput(1.0);
+        this._robotDrive.setMaxOutput(0.4);
         this._robotDrive.setDeadband(0.5);
     }
 
@@ -44,7 +42,7 @@ public class ArcadeDrive
     public void Drive(OI oi)
     {
         double percision = oi.getDriveRightTrigger() * .5;
-        if (percision > 1)
+        if (percision > 0)
         {
             _robotDrive.arcadeDrive(oi.getDriveLeftY() * percision, oi.getDriveRightX() * percision);
         }

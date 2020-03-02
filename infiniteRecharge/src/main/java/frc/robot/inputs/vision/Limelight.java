@@ -2,7 +2,6 @@ package frc.robot.inputs.vision;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.inputs.motion.OI;
 
 /**
  * Default Location - http://limelight.local:5801
@@ -32,7 +31,7 @@ import frc.robot.inputs.motion.OI;
  * 0 	        Vision processor
  * 1 	        Driver Camera (Increases exposure, disables vision processing)
  * 
- *  pipeline 	Sets limelight’s current pipeline
+ * pipeline 	Sets limelight’s current pipeline
  * 0 .. 9 	    Select pipeline 0..9
  * 
  * stream 	Sets limelight’s streaming mode
