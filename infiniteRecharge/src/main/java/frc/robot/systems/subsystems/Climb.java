@@ -10,6 +10,8 @@ public class Climb
         _slide = slideMotor;
         _winchL = winchLeft;
         _winchR = winchRight;
+
+        _winchR.IsInverted(true);
     }
 
     public void SlideUp()
@@ -25,12 +27,12 @@ public class Climb
     public void Unravel()
     {
         _winchL.SetPower(0.25);
-        _winchR.SetPower(-0.25);
+        _winchR.SetPower(0.25);
     } 
 
     public void Ravel()
     {
-        _winchL.SetPower(-0.25);
+        _winchL.SetPower(0.25);
         _winchR.SetPower(0.25);
     }
 
