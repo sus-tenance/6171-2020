@@ -57,6 +57,11 @@ public class ArcadeDrive
         _robotDrive.arcadeDrive(driveAdjust.getDistanceAdjust(), driveAdjust.getAimAdjust());
     }
 
+    public void Drive(double driveSpeed, double turnSpeed)
+    {
+        _robotDrive.arcadeDrive(driveSpeed, turnSpeed);
+    }
+
     /*
     public void Drive(Limelight limelight)
     {

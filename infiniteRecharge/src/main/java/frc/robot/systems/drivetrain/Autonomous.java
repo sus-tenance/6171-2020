@@ -1,14 +1,35 @@
 package frc.robot.systems.drivetrain;
 
-import edu.wpi.first.wpilibj.Timer;
+import frc.robot.outputs.vision.Limelight;
+import frc.robot.systems.subsystems.Shooter;
 
 public class Autonomous
 {
-    private Timer _timer = new Timer();
+    private ArcadeDrive _robotDrive;
 
-    public void TimerStart()
+    private Limelight _limelight = new Limelight();
+    private Shooter  _shoot;
+
+    private double _tx;
+
+    public Autonomous(ArcadeDrive robotDrive, Shooter shoot)
     {
-        _timer.start();
+        _robotDrive = robotDrive;
+        _shoot = shoot;
+    }
+
+    public void Drive()
+    {
+        _tx = _limelight.GetTx();
+
+        if ((_tx > 2) && (_tx < 2))
+        {
+            _shoot.Shoot();
+        }
+        else
+        {
+            _robotDrive.Drive(0.0, 0.3);
+        }
     }
 }
 

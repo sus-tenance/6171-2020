@@ -28,6 +28,8 @@ import frc.robot.systems.drive.Talon;
 import frc.robot.systems.drivetrain.ArcadeDrive;
 import frc.robot.systems.drivetrain.Autonomous;
 import frc.robot.systems.subsystems.Climb;
+import frc.robot.systems.subsystems.Feeder;
+import frc.robot.systems.subsystems.Hopper;
 import frc.robot.systems.subsystems.Intaker;
 import frc.robot.systems.subsystems.Shooter;
 
@@ -44,6 +46,7 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  //#region motors
   /**
    * DRIVE MOTORS
    */
@@ -73,6 +76,21 @@ public class Robot extends TimedRobot {
   private Intaker _intake = new Intaker(_intakeMotor);
 
   /**
+   * HOPPER MOTOR
+   */
+  private IMotor _hopperLeftMotor = new Talon(Robotmap._hopperLeftMotorID);
+  private IMotor _hopperRightMotor = new Talon(Robotmap._hopperRightMotorID);
+
+  private Hopper _hopper = new Hopper(_hopperLeftMotor, _hopperRightMotor);
+
+   /**
+    * FEEDER MOTOR
+    */
+    private IMotor _feederMotor = new Talon(Robotmap._feederMotorID);
+
+    private Feeder _feeder = new Feeder(_feederMotor);
+
+  /**
    * CLIMB/WINCH MOTORS
    */
   private IMotor _winchLeft = new SparkMax(Robotmap._winchLeftMotor);
@@ -80,6 +98,7 @@ public class Robot extends TimedRobot {
   private IMotor _slide = new Talon(Robotmap._slideMotor);
 
   private Climb _climb = new Climb(_slide, _winchLeft, _winchRight);
+  //#endregion motors
 
   private OI oi;
   private Limelight _limelight;
@@ -183,7 +202,14 @@ public class Robot extends TimedRobot {
     }
     else
     {
-      _drivetrain.Drive(oi);
+      if (oi.getA())
+      {
+        _shoot.Shoot();
+      }
+      else{
+        _shoot.StopMotors();
+      }
+      //_drivetrain.Drive(oi);
       /*
       if (oi.getY())
       {
