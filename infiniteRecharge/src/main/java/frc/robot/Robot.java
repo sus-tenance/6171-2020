@@ -179,8 +179,14 @@ public class Robot extends TimedRobot {
       default:
         DriveAdjust driveAdjust = PID.CalculateDrive(_limelight.GetTx(), _limelight.GetTy());
         _drivetrain.Drive(driveAdjust);
-        if (_shootingEncoder.getVelocity() > _desiredVelocity) _feeder.Feed();
-        if (_McTimer.get() > 12) _drivetrain.Drive(-0.3, 0.0);
+        if (_shootingEncoder.getVelocity() > _desiredVelocity)
+        {
+          _feeder.Feed();
+        }
+        if (_McTimer.get() > 12)
+        {
+          _drivetrain.Drive(-0.3, 0.0);
+        }
         break;
     }
   }

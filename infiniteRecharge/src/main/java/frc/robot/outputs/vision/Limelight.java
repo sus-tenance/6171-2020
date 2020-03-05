@@ -54,9 +54,9 @@ public class Limelight
     {
         _limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
-        _limelightTa = _limelightTable.getEntry("ta").getDouble(99);
-        _limelightTx = _limelightTable.getEntry("tx").getDouble(99);
-        _limelightTy = _limelightTable.getEntry("ty").getDouble(99);
+        _limelightTa = _limelightTable.getEntry("ta").getDouble(0);
+        _limelightTx = _limelightTable.getEntry("tx").getDouble(0);
+        _limelightTy = _limelightTable.getEntry("ty").getDouble(0);
         _limelightTv = _limelightTable.getEntry("tv").getBoolean(false);
 
         UpdateSmartDashboard();
@@ -72,19 +72,19 @@ public class Limelight
         
     public double GetTa()
     {
-        _limelightTa = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(99);
+        _limelightTa = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
         return _limelightTa;
     }
 
     public Double GetTx()
     {
-        _limelightTx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(99);
+        _limelightTx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
         return _limelightTx;
     }
 
     public double GetTy()
     {
-        _limelightTy = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(99);
+        _limelightTy = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
         return _limelightTy;
     }
 
