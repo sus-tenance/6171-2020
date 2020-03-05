@@ -8,7 +8,6 @@
 package frc.robot;
 
 import com.revrobotics.CANEncoder;
-import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -31,9 +30,9 @@ import frc.robot.systems.drive.SparkMax;
 import frc.robot.systems.drive.Talon;
 import frc.robot.systems.drivetrain.ArcadeDrive;
 import frc.robot.systems.subsystems.Climb;
+import frc.robot.systems.subsystems.Collector;
 import frc.robot.systems.subsystems.Feeder;
 import frc.robot.systems.subsystems.Hopper;
-import frc.robot.systems.subsystems.Intaker;
 import frc.robot.systems.subsystems.Shooter;
 
 /**
@@ -81,7 +80,7 @@ public class Robot extends TimedRobot {
    */
   private IMotor _intakeMotor = new Talon(Robotmap._intakeMotorID);
 
-  private Intaker _intake = new Intaker(_intakeMotor);
+  private Collector _intake = new Collector(_intakeMotor);
 
   /**
    * HOPPER MOTOR
@@ -192,7 +191,48 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() 
   {
-    _drivetrain.Drive(_driveController);
+
+    //Driver
+    if (_driveController.getA())
+    {
+      _drivetrain.SetDriverType(DriverType.Human);
+    }
+    else if (_driveController.getB())
+    {
+      _drivetrain.SetDriverType(DriverType.Limelight);
+    }
+
+    if (_drivetrain.GetDriverType() == DriverType.Limelight)
+    {
+      DriveAdjust driveAdjust = PID.CalculateDrive(_limelight.GetTx(), _limelight.GetTy());
+      _drivetrain.Drive(driveAdjust);
+    }
+    else if (_drivetrain.GetDriverType() == DriverType.Human)
+    {
+      _drivetrain.Drive(_driveController);
+    }
+
+    //Operator
+    if (_operatorController.getA())
+    {
+      _hopper.ReverseHopper();
+    }
+    else if (_operatorController.getB())
+    {
+      _hopper.Hop();
+    }
+    else if (_operatorController.getX())
+    {
+     _intake.ReverseCollector(); 
+    }
+    else if (_operatorController.getY())
+    {
+      _intake.Collect();
+    }
+    else if (_operatorController.getDriveLeftY() > 0)
+    {
+      _feeder.Feed(_operatorController.getDriveLeftY());
+    }
   }
 
   /**

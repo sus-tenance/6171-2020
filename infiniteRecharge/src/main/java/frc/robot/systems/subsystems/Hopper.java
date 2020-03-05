@@ -14,9 +14,15 @@ public class Hopper
         _hopperRight = hopperRight;
     }
 
-    public void usehopper()
+    public void Hop()
     {
         _hopperLeft.SetPower(_power);
         _hopperRight.SetPower(-_power);
+    }
+
+    public void ReverseHopper()
+    {
+        _hopperLeft.SetPower(-_power);
+        _hopperRight.SetPower(_power);
     }
 }
