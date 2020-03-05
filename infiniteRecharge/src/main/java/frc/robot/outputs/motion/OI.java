@@ -52,9 +52,9 @@ public class OI
 	Joystick drive, manipulator, buffalo;
 	Joystick saitek; 
 	JoystickButton D1, D2, D3, D4, D5, D6, Dback, Dstart, DleftJoystick, DrightJoystick;
-	public OI()
+	public OI(int port)
 	{
-		drive = new Joystick(0);
+		drive = new Joystick(port);
 		dA = new JoystickButton(drive, A_NUM);
 		dB = new JoystickButton(drive, B_NUM);
 		dY = new JoystickButton(drive, Y_NUM);

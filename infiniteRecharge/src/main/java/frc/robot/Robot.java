@@ -30,7 +30,6 @@ import frc.robot.systems.drive.IMotor;
 import frc.robot.systems.drive.SparkMax;
 import frc.robot.systems.drive.Talon;
 import frc.robot.systems.drivetrain.ArcadeDrive;
-import frc.robot.systems.drivetrain.Autonomous;
 import frc.robot.systems.subsystems.Climb;
 import frc.robot.systems.subsystems.Feeder;
 import frc.robot.systems.subsystems.Hopper;
@@ -109,9 +108,9 @@ public class Robot extends TimedRobot {
   private Climb _climb = new Climb(_slide, _winchLeft, _winchRight);
   //#endregion motors
 
-  private OI oi;
+  private OI _driveController;
+  private OI _operatorController;
   private Limelight _limelight;
-  private Autonomous _auton = new Autonomous(_drivetrain, _shoot, _feeder);
 
   /**
    * This function is run when the robot is first started up and should be
@@ -122,7 +121,9 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    oi = new OI();
+    _driveController = new OI(0);
+    _operatorController = new OI(1);
+
     _limelight = new Limelight();
 
     mFrontLeft.SetIdleMode(RestMode.Brake);
@@ -180,7 +181,7 @@ public class Robot extends TimedRobot {
         DriveAdjust driveAdjust = PID.CalculateDrive(_limelight.GetTx(), _limelight.GetTy());
         _drivetrain.Drive(driveAdjust);
         if (_shootingEncoder.getVelocity() > _desiredVelocity) _feeder.Feed();
-        if (_McTimer.get() > 12) _drivetrain.Drive(0.3, 0.0);
+        if (_McTimer.get() > 12) _drivetrain.Drive(-0.3, 0.0);
         break;
     }
   }
@@ -189,61 +190,9 @@ public class Robot extends TimedRobot {
    * This function is called periodically during operator control.
    */
   @Override
-  public void teleopPeriodic() {
-    /**
-     * Set the driver type.
-     */
-
-     /*
-    if (oi.getX())
-    {
-      _drivetrain.SetDriverType(DriverType.Limelight);
-    }
-    else*/ if (oi.getB())
-    {
-      _drivetrain.SetDriverType(DriverType.Human);
-    }
-
-    _limelight.Update();
-
-     /**
-      * Drive the robot using limelight or the controller.
-      */
-    if (_drivetrain.GetDriverType() == DriverType.Limelight)
-    {
-      DriveAdjust driveAdjust = PID.CalculateDrive(_limelight.GetTx(), _limelight.GetTy());
-      _drivetrain.Drive(driveAdjust);
-    }
-    else
-    {
-      if (oi.getA())
-      {
-        _shoot.Shoot();
-      }
-      else{
-        _shoot.StopMotors();
-      }
-      //_drivetrain.Drive(oi);
-      /*
-      if (oi.getY())
-      {
-        _climb.SlideUp();
-        _climb.Unravel();
-      }
-      else if (oi.getA())
-      {
-        _climb.SlideDown();
-      }
-      else if (oi.getDriveRightTrigger() > 0)
-      {
-        _climb.Ravel();
-      }
-      else
-      {
-        _climb.StopMotors();
-      }
-      */
-    }
+  public void teleopPeriodic() 
+  {
+    _drivetrain.Drive(_driveController);
   }
 
   /**

@@ -7,8 +7,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.SpeedController;
-
 public class SparkMax implements IMotor
 {
     private CANSparkMax _sparkMax;
