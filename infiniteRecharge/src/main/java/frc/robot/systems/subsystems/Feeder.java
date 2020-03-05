@@ -15,6 +15,11 @@ public class Feeder
 
     public void Feed()
     {
-        _feederMotor.SetPower(_power);
+        _feederMotor.SetPower(-_power);
+    }
+
+    public void StopMotor()
+    {
+        _feederMotor.SetPower(0);
     }
 }

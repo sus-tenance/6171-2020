@@ -2,6 +2,7 @@ package frc.robot.systems.drive;
 
 import frc.robot.models.enums.*;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -70,8 +71,13 @@ public class SparkMax implements IMotor
         _sparkMax.set(power);
     }
 
-    public SpeedController GetSpeedController()
+    public CANSparkMax GetSparkMax()
     {
         return _sparkMax;
+    }
+
+    public TalonSRX GetTalon()
+    {
+        return null;
     }
 }

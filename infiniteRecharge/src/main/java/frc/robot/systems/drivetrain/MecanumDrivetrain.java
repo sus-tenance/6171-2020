@@ -9,8 +9,8 @@ public class MecanumDrivetrain {
     private MecanumDrive _robotDrive;
 
     public MecanumDrivetrain(IMotor frontLeft, IMotor rearLeft, IMotor frontRight, IMotor rearRight) {
-        _robotDrive = new MecanumDrive(frontLeft.GetSpeedController(), rearLeft.GetSpeedController(),
-                frontRight.GetSpeedController(), rearRight.GetSpeedController());
+        _robotDrive = new MecanumDrive(frontLeft.GetSparkMax(), rearLeft.GetSparkMax(),
+                frontRight.GetSparkMax(), rearRight.GetSparkMax());
     }
 
     private DriverType _driverType;

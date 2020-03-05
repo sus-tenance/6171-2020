@@ -1,6 +1,8 @@
 package frc.robot.systems.drive;
 
-import edu.wpi.first.wpilibj.SpeedController;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+
 import frc.robot.models.enums.*;
 
 public interface IMotor
@@ -13,5 +15,7 @@ public interface IMotor
 
     public void SetPower(double power);
 
-    public SpeedController GetSpeedController();
+    public CANSparkMax GetSparkMax();
+
+    public TalonSRX GetTalon();
 }

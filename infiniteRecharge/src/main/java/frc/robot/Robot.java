@@ -7,8 +7,12 @@
 
 package frc.robot;
 
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -46,6 +50,10 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  private Timer _McTimer = new Timer();
+
+  private final double _desiredVelocity = 1600;
+
   //#region motors
   /**
    * DRIVE MOTORS
@@ -55,8 +63,8 @@ public class Robot extends TimedRobot {
   private IMotor mFrontRight = new SparkMax(Robotmap._frontRightMotorID);
   private IMotor mRearRight = new SparkMax(Robotmap._rearRightMotorID);
 
-  private SpeedControllerGroup leftGroup = new SpeedControllerGroup(mFrontLeft.GetSpeedController(), mRearLeft.GetSpeedController());
-  private SpeedControllerGroup rightGroup = new SpeedControllerGroup(mFrontRight.GetSpeedController(), mRearRight.GetSpeedController());
+  private SpeedControllerGroup leftGroup = new SpeedControllerGroup(mFrontLeft.GetSparkMax(), mRearLeft.GetSparkMax());
+  private SpeedControllerGroup rightGroup = new SpeedControllerGroup(mFrontRight.GetSparkMax(), mRearRight.GetSparkMax());
   //private MecanumDrivetrain _drivetrain = new MecanumDrivetrain(mFrontLeft, mRearLeft, mFrontRight, mRearRight);
   private ArcadeDrive _drivetrain = new ArcadeDrive(leftGroup, rightGroup);
 
@@ -65,6 +73,7 @@ public class Robot extends TimedRobot {
    */
   private IMotor _ShootingOne = new SparkMax(Robotmap._shooterLeftMotorID);
   private IMotor _ShootingTwo = new SparkMax(Robotmap._shooterRightMotorID);
+  private CANEncoder _shootingEncoder = new CANEncoder(_ShootingOne.GetSparkMax());
   
   private Shooter _shoot = new Shooter(_ShootingOne, _ShootingTwo);
 
@@ -102,7 +111,7 @@ public class Robot extends TimedRobot {
 
   private OI oi;
   private Limelight _limelight;
-  private Autonomous _auton = new Autonomous();
+  private Autonomous _auton = new Autonomous(_drivetrain, _shoot, _feeder);
 
   /**
    * This function is run when the robot is first started up and should be
@@ -150,8 +159,11 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+    
 
-    _auton.TimerStart();
+    _McTimer.start();
+    final double power = 0.27;
+    _shoot.Shoot(power);
   }
 
   /**
@@ -167,6 +179,8 @@ public class Robot extends TimedRobot {
       default:
         DriveAdjust driveAdjust = PID.CalculateDrive(_limelight.GetTx(), _limelight.GetTy());
         _drivetrain.Drive(driveAdjust);
+        if (_shootingEncoder.getVelocity() > _desiredVelocity) _feeder.Feed();
+        if (_McTimer.get() > 12) _drivetrain.Drive(0.3, 0.0);
         break;
     }
   }

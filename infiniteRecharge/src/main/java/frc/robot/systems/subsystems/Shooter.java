@@ -22,6 +22,12 @@ public class Shooter
         _shootRighMotor.SetPower(_power);
     }
 
+    public void Shoot(double speed)
+    {
+        _shootLeftMotor.SetPower(speed);
+        _shootRighMotor.SetPower(speed);
+    }
+
     public void StopMotors()
     {
         _shootLeftMotor.SetPower(0);

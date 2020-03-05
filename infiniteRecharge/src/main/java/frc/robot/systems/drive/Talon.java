@@ -4,9 +4,9 @@ import frc.robot.models.enums.RestMode;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.wpilibj.SpeedController;
+import com.revrobotics.CANSparkMax;
 
 public class Talon implements IMotor {
     private WPI_TalonSRX _talon;
@@ -50,7 +50,12 @@ public class Talon implements IMotor {
         _talon.set(ControlMode.PercentOutput, power);
     }
 
-    public  SpeedController GetSpeedController() {
+    public CANSparkMax GetSparkMax() {
+        return null;
+    }
+
+    @Override
+    public TalonSRX GetTalon() {
         return _talon;
     }
 }
