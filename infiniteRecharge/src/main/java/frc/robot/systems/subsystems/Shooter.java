@@ -6,7 +6,7 @@ public class Shooter
 {
     private IMotor _shootLeftMotor, _shootRighMotor;
 
-    private double _power = 0.50;
+    private double _power = 0.303;
 
     public Shooter(IMotor shootLeftMotor, IMotor shootRightMotor)
     {

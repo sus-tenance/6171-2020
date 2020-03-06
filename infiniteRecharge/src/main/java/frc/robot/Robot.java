@@ -9,6 +9,8 @@ package frc.robot;
 
 import com.revrobotics.CANEncoder;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -47,10 +49,6 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
-  private Timer _McTimer = new Timer();
-
-  private final double _desiredVelocity = 1600;
 
   //#region motors
   /**
@@ -111,6 +109,11 @@ public class Robot extends TimedRobot {
   private OI _operatorController;
   private Limelight _limelight;
 
+  //Needed for autonomous
+  private Timer _McTimer = new Timer();
+  private final double power = 0.28;
+  private final double _desiredVelocity = 1400;
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -125,10 +128,14 @@ public class Robot extends TimedRobot {
 
     _limelight = new Limelight();
 
-    mFrontLeft.SetIdleMode(RestMode.Brake);
-    mRearLeft.SetIdleMode(RestMode.Brake);
-    mFrontRight.SetIdleMode(RestMode.Brake);
-    mRearRight.SetIdleMode(RestMode.Brake);
+    mFrontLeft.SetIdleMode(RestMode.Coast);
+    mRearLeft.SetIdleMode(RestMode.Coast);
+    mFrontRight.SetIdleMode(RestMode.Coast);
+    mRearRight.SetIdleMode(RestMode.Coast);
+
+    UsbCamera cam = CameraServer.getInstance().startAutomaticCapture(0);
+    cam.setResolution(640, 320);
+    cam.setFPS(30);
   }
 
   /**
@@ -141,6 +148,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putNumber("shooter rpm", _shootingEncoder.getVelocity());
+    _limelight.Update();
   }
 
   /**
@@ -162,8 +171,8 @@ public class Robot extends TimedRobot {
     
 
     _McTimer.start();
-    final double power = 0.27;
-    _shoot.Shoot(power);
+    _feederMotor.Reset();
+    _feeder.Feed(0.0);
   }
 
   /**
@@ -177,15 +186,22 @@ public class Robot extends TimedRobot {
         break;
       case kDefaultAuto:
       default:
-        DriveAdjust driveAdjust = PID.CalculateDrive(_limelight.GetTx(), _limelight.GetTy());
-        _drivetrain.Drive(driveAdjust);
+      _shoot.Shoot(power);
         if (_shootingEncoder.getVelocity() > _desiredVelocity)
         {
           _feeder.Feed();
         }
-        if (_McTimer.get() > 12)
+        if (_McTimer.get() > 5 && _McTimer.get() < 8)
         {
-          _drivetrain.Drive(-0.3, 0.0);
+          _drivetrain.Drive(-0.4, 0.0);
+        }
+        else if (_McTimer.get() > 8 && _McTimer.get() < 12)
+        {
+          _drivetrain.Drive(0.4, 0.0);
+        }
+        else if (_McTimer.get() > 12)
+        {
+          _drivetrain.Drive(0.0, 0.4);
         }
         break;
     }
@@ -197,49 +213,73 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() 
   {
-
     //Driver
-    if (_driveController.getA())
-    {
-      _drivetrain.SetDriverType(DriverType.Human);
-    }
-    else if (_driveController.getB())
-    {
-      _drivetrain.SetDriverType(DriverType.Limelight);
-    }
-
-    if (_drivetrain.GetDriverType() == DriverType.Limelight)
-    {
-      DriveAdjust driveAdjust = PID.CalculateDrive(_limelight.GetTx(), _limelight.GetTy());
-      _drivetrain.Drive(driveAdjust);
-    }
-    else if (_drivetrain.GetDriverType() == DriverType.Human)
-    {
-      _drivetrain.Drive(_driveController);
-    }
+    _drivetrain.Drive(_driveController);
 
     //Operator
-    if (_operatorController.getA())
+    if (_operatorController.dpad() == 180.0)
     {
       _hopper.ReverseHopper();
     }
-    else if (_operatorController.getB())
+    else if (_operatorController.dpad() == 90.0)
     {
       _hopper.Hop();
     }
-    else if (_operatorController.getX())
+    else
+    {
+      _hopper.StopMotors();
+    }
+
+    if (_operatorController.dpad() == 45.0)
+    {
+      _hopper.Hop();
+      _intake.Collect();
+    }
+     
+    if (_operatorController.dpad() == 225.0)
+    {
+      _hopper.ReverseHopper();
+      _intake.ReverseCollector();
+    }
+
+    if (_operatorController.dpad() == 270.0)
     {
      _intake.ReverseCollector(); 
     }
-    else if (_operatorController.getY())
+    else if (_operatorController.dpad() == 0.0)
     {
       _intake.Collect();
     }
-    else if (_operatorController.getDriveLeftY() > 0)
+    else 
     {
-      _feeder.Feed(_operatorController.getDriveLeftY());
+      _intake.StopMotor();
     }
+
+    if (_operatorController.getY())
+    {
+      _feeder.Feed(-0.2);
+    }
+    else if (_operatorController.getA())
+    {
+      _feeder.Feed(0.2);
+    }
+    else
+    {
+      _feeder.StopMotor();
+    }
+
+    if (_operatorController.getDriveRightTrigger() > 0)
+    {
+      _shoot.Shoot();
+    }
+    else
+    {
+      _shoot.StopMotors();
+    }
+
+    
   }
+  
 
   /**
    * This function is called periodically during test mode.

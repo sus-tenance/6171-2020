@@ -6,7 +6,7 @@ public class Feeder
 {
     private IMotor _feederMotor;
 
-    private double _power = 0.5;
+    private double _power = 1;
 
     public Feeder(IMotor feederMotor)
     {

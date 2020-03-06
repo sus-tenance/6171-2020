@@ -25,4 +25,10 @@ public class Hopper
         _hopperLeft.SetPower(-_power);
         _hopperRight.SetPower(_power);
     }
+
+    public void StopMotors()
+    {
+        _hopperLeft.SetPower(0);
+        _hopperRight.SetPower(0);
+    }
 }

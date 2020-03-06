@@ -15,11 +15,16 @@ public class Collector
 
     public void Collect()
     {
-        _CollectMotor.SetPower(_power);
+        _CollectMotor.SetPower(-_power);
     } 
 
     public void ReverseCollector()
     {
-        _CollectMotor.SetPower(-_power);
+        _CollectMotor.SetPower(_power*.5);
+    }
+
+    public void StopMotor()
+    {
+        _CollectMotor.SetPower(0);
     }
 }

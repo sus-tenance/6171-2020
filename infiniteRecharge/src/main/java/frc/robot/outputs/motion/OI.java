@@ -52,6 +52,10 @@ public class OI
 	Joystick drive, manipulator, buffalo;
 	Joystick saitek; 
 	JoystickButton D1, D2, D3, D4, D5, D6, Dback, Dstart, DleftJoystick, DrightJoystick;
+
+	public double pov;
+	public boolean stb;
+
 	public OI(int port)
 	{
 		drive = new Joystick(port);
@@ -102,6 +106,16 @@ public class OI
 		bStart = new JoystickButton(buffalo, B_START);
 	}
 	//Return Methods for driving
+	public double dpad()
+	{
+		return drive.getPOV();
+	}
+
+	public boolean smalltriggerbutton()
+	{
+		return drive.getRawButton(RB_NUM);
+	}
+
 	public double getDriveLeftY()
 	{
 		if(Math.abs(drive.getRawAxis(LEFT_Y))< 0.2)

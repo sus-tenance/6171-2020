@@ -26,11 +26,11 @@ public class PID
         double aimAdjust = 0.0;
         double distanceAdjust = 0.0;
 
-        if (tx > 1.0)
+        if (tx > .5)
         {
             aimAdjust = kpAim * headingError + minAimThreshold; //Seems like +/- Thresholds are flipped
         }
-        else if (tx < 1.0)
+        else if (tx < .5)
         {
             aimAdjust = kpAim * headingError - minAimThreshold;
         }
