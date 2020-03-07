@@ -12,8 +12,10 @@ public class ArcadeDrive
     public ArcadeDrive(SpeedControllerGroup leftGroup, SpeedControllerGroup rightGroup)
     {
         _robotDrive = new DifferentialDrive(leftGroup, rightGroup);
+        _robotDrive.setMaxOutput(.5);
     }
 
+    /*
     private DriverType _driverType;
 
     public DriverType GetDriverType()
@@ -22,12 +24,14 @@ public class ArcadeDrive
     }
     public void SetDriverType(DriverType driverType)
     {
-        _driverType = driverType;
+        _driverType = DriverType.Human;
 
         if (_driverType == DriverType.Human) StartHumanDriver();
             else StartLimelightDriver();
     }
+    */
 
+    /*
     private void StartHumanDriver()
     {
         this._robotDrive.setMaxOutput(0.4);
@@ -38,9 +42,11 @@ public class ArcadeDrive
     {
         this._robotDrive.setMaxOutput(0.3);
     }
+    */
 
     public void Drive(OI oi)
     {
+        
         double percision = oi.getDriveRightTrigger() * .5;
         if (percision > 0)
         {
@@ -54,7 +60,7 @@ public class ArcadeDrive
 
     public void Drive(DriveAdjust driveAdjust)
     {
-        _robotDrive.arcadeDrive(driveAdjust.getDistanceAdjust(), driveAdjust.getAimAdjust());
+        _robotDrive.arcadeDrive(0, driveAdjust.getAimAdjust());
     }
 
     public void Drive(double driveSpeed, double turnSpeed)

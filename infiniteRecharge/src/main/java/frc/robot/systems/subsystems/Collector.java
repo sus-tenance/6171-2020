@@ -6,7 +6,7 @@ public class Collector
 {
     private IMotor _CollectMotor;
 
-    private final double _power = 1;
+    private final double _power = .7;
 
     public Collector(IMotor CollectMotor)
     {

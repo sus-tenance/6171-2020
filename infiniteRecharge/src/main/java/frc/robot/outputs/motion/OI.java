@@ -111,9 +111,14 @@ public class OI
 		return drive.getPOV();
 	}
 
-	public boolean smalltriggerbutton()
+	public boolean LButton() //out
 	{
-		return drive.getRawButton(RB_NUM);
+		return drive.getRawButton(5);
+	}
+
+	public boolean RButton() //in
+	{
+		return drive.getRawButton(6);
 	}
 
 	public double getDriveLeftY()

@@ -17,7 +17,7 @@ public class PID
     {
         double kpAim = -0.035; //Proportional constant for Aiming
         double kpDistance = -0.15; //Proportional Constant for Distance
-        double minAimThreshold = 0.06; //TODO This should be slightly less than the Minimum Power needed to spin robot 
+        double minAimThreshold = 0.5; //TODO This should be slightly less than the Minimum Power needed to spin robot 
         double minDistanceThreshold = 0.1; //TODO This should be slightly less than the Minimum Power needed to advance/retreat robot 
 
         double headingError = -tx;
@@ -26,16 +26,16 @@ public class PID
         double aimAdjust = 0.0;
         double distanceAdjust = 0.0;
 
-        if (tx > .5)
+        if (tx > 0.15)
         {
             aimAdjust = kpAim * headingError + minAimThreshold; //Seems like +/- Thresholds are flipped
         }
-        else if (tx < .5)
+        else if (tx < 0.15)
         {
             aimAdjust = kpAim * headingError - minAimThreshold;
         }
         
-        if (ty > 0.2)
+        if (ty > 0.15)
         {
             distanceAdjust = -1 * kpDistance * distanceError + minDistanceThreshold; //Seems like +/- Thresholds are flipped      
         }

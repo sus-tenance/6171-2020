@@ -6,26 +6,26 @@ public class Shooter
 {
     private IMotor _shootLeftMotor, _shootRighMotor;
 
-    private double _power = 0.303;
+    private double _power = 0.31;
 
     public Shooter(IMotor shootLeftMotor, IMotor shootRightMotor)
     {
         _shootLeftMotor = shootLeftMotor;
         _shootRighMotor = shootRightMotor;
 
-        _shootRighMotor.IsInverted(true);
+        //_shootRighMotor.IsInverted(true);
     }
 
     public void Shoot()
     {
         _shootLeftMotor.SetPower(_power);
-        _shootRighMotor.SetPower(_power);
+        _shootRighMotor.SetPower(-_power);
     }
 
     public void Shoot(double speed)
     {
         _shootLeftMotor.SetPower(speed);
-        _shootRighMotor.SetPower(speed);
+        _shootRighMotor.SetPower(-speed);
     }
 
     public void StopMotors()

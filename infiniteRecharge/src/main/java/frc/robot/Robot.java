@@ -111,8 +111,8 @@ public class Robot extends TimedRobot {
 
   //Needed for autonomous
   private Timer _McTimer = new Timer();
-  private final double power = 0.28;
-  private final double _desiredVelocity = 1400;
+  private final double power = 0.27;
+  private final double _desiredVelocity = 1250;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -136,6 +136,8 @@ public class Robot extends TimedRobot {
     UsbCamera cam = CameraServer.getInstance().startAutomaticCapture(0);
     cam.setResolution(640, 320);
     cam.setFPS(30);
+
+    SmartDashboard.getNumber("velocity", 0.0);
   }
 
   /**
@@ -167,7 +169,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+    System.out.println("Auto selected: maxOutput" + m_autoSelected);
     
 
     _McTimer.start();
@@ -189,7 +191,7 @@ public class Robot extends TimedRobot {
       _shoot.Shoot(power);
         if (_shootingEncoder.getVelocity() > _desiredVelocity)
         {
-          _feeder.Feed();
+          _feeder.Feed(-.7);
         }
         if (_McTimer.get() > 5 && _McTimer.get() < 8)
         {
@@ -201,7 +203,7 @@ public class Robot extends TimedRobot {
         }
         else if (_McTimer.get() > 12)
         {
-          _drivetrain.Drive(0.0, 0.4);
+          _drivetrain.Drive(0.0, 0.0);
         }
         break;
     }
@@ -230,25 +232,13 @@ public class Robot extends TimedRobot {
       _hopper.StopMotors();
     }
 
-    if (_operatorController.dpad() == 45.0)
-    {
-      _hopper.Hop();
-      _intake.Collect();
+    if (_driveController.RButton())
+    {      
+      _intake.Collect();    
     }
-     
-    if (_operatorController.dpad() == 225.0)
+    else if (_driveController.LButton())
     {
-      _hopper.ReverseHopper();
       _intake.ReverseCollector();
-    }
-
-    if (_operatorController.dpad() == 270.0)
-    {
-     _intake.ReverseCollector(); 
-    }
-    else if (_operatorController.dpad() == 0.0)
-    {
-      _intake.Collect();
     }
     else 
     {
@@ -257,27 +247,50 @@ public class Robot extends TimedRobot {
 
     if (_operatorController.getY())
     {
-      _feeder.Feed(-0.2);
+      _feeder.Feed(-0.4);
     }
     else if (_operatorController.getA())
     {
-      _feeder.Feed(0.2);
+      _feeder.Feed(0.4);
     }
     else
     {
       _feeder.StopMotor();
     }
 
-    if (_operatorController.getDriveRightTrigger() > 0)
+    // 10 FOOT SHOT
+    if (_drive
+    Controller.getDriveLeftTrigger() > 0)
     {
-      _shoot.Shoot();
+      if (!_operatorController.RButton()) _shoot.Shoot(.28); else if (_operatorController.RButton()) _shoot.Shoot(.32);
+      //init line (10 foot)
+      if (_shootingEncoder.getVelocity() > 1250 && _shootingEncoder.getVelocity() < 1500 &&!_operatorController.RButton())
+      {
+        _shoot.StopMotors();
+        _feeder.Feed(-.4);
+      }
+      //trench (18 foot)
+      else if (_shootingEncoder.getVelocity() > 1645 && _operatorController.RButton())
+      {
+        _shoot.StopMotors();
+        _feeder.Feed(-.4);
+      }
+      else if (!_operatorController.getA() || !_operatorController.getY())
+      {
+        _feeder.Feed(0.0);
+      }
     }
     else
     {
-      _shoot.StopMotors();
+      _shoot.Shoot(.2);
     }
 
-    
+    if (_operatorController.getDriveLeftTrigger() == 1 && (Math.abs(_driveController.getDriveLeftY()) == 0) && (Math.abs(_driveController.getDriveRightX()) == 0))
+    {
+      _shoot.Shoot(.31);
+      DriveAdjust driveAdjust = PID.CalculateDrive(-_limelight.GetTx(), _limelight.GetTy());
+    _drivetrain.Drive(driveAdjust);
+    }
   }
   
 
@@ -286,5 +299,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+    if (_shootingEncoder.getVelocity() < _desiredVelocity)
+    {
+      _shoot.Shoot(.3);
+    }
+    else
+    {
+      _shoot.StopMotors();
+    }
   }
 }
