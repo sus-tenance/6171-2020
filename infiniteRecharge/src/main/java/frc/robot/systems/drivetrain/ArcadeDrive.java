@@ -12,7 +12,7 @@ public class ArcadeDrive
     public ArcadeDrive(SpeedControllerGroup leftGroup, SpeedControllerGroup rightGroup)
     {
         _robotDrive = new DifferentialDrive(leftGroup, rightGroup);
-        _robotDrive.setMaxOutput(.5);
+        _robotDrive.setMaxOutput(.75);
     }
 
     /*
@@ -54,7 +54,7 @@ public class ArcadeDrive
         }
         else 
         {
-            _robotDrive.arcadeDrive(oi.getDriveLeftY(), -oi.getDriveRightX());
+            _robotDrive.arcadeDrive(oi.getDriveLeftY()*.87, -oi.getDriveRightX() * 1.5);
         }
     }
 

@@ -112,7 +112,7 @@ public class Robot extends TimedRobot {
   //Needed for autonomous
   private Timer _McTimer = new Timer();
   private final double power = 0.27;
-  private final double _desiredVelocity = 1250;
+  private final double _desiredVelocity = 1230;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -128,16 +128,23 @@ public class Robot extends TimedRobot {
 
     _limelight = new Limelight();
 
-    mFrontLeft.SetIdleMode(RestMode.Coast);
-    mRearLeft.SetIdleMode(RestMode.Coast);
-    mFrontRight.SetIdleMode(RestMode.Coast);
-    mRearRight.SetIdleMode(RestMode.Coast);
+    mFrontLeft.SetIdleMode(RestMode.Brake);
+    mRearLeft.SetIdleMode(RestMode.Brake);
+    mFrontRight.SetIdleMode(RestMode.Brake);
+    mRearRight.SetIdleMode(RestMode.Brake);
 
-    UsbCamera cam = CameraServer.getInstance().startAutomaticCapture(0);
-    cam.setResolution(640, 320);
-    cam.setFPS(30);
+    UsbCamera intakeCam = CameraServer.getInstance().startAutomaticCapture(0);
+    intakeCam.setResolution(240, 240);
+    intakeCam.setFPS(30);
+
+    UsbCamera feedCam = CameraServer.getInstance().startAutomaticCapture(1);
+    feedCam.setResolution(240, 240);
+    feedCam.setFPS(30);
 
     SmartDashboard.getNumber("velocity", 0.0);
+
+    _ShootingOne.Reset();
+    _ShootingTwo.Reset();
   }
 
   /**
@@ -193,13 +200,9 @@ public class Robot extends TimedRobot {
         {
           _feeder.Feed(-.7);
         }
-        if (_McTimer.get() > 5 && _McTimer.get() < 8)
+        if (_McTimer.get() > 8 && _McTimer.get() < 12)
         {
-          _drivetrain.Drive(-0.4, 0.0);
-        }
-        else if (_McTimer.get() > 8 && _McTimer.get() < 12)
-        {
-          _drivetrain.Drive(0.4, 0.0);
+          _drivetrain.Drive(0.5, 0.0);
         }
         else if (_McTimer.get() > 12)
         {
@@ -253,18 +256,21 @@ public class Robot extends TimedRobot {
     {
       _feeder.Feed(0.4);
     }
+    else if (_operatorController.getB())
+    {
+      _feeder.Feed(-0.2);
+    }
     else
     {
       _feeder.StopMotor();
     }
 
-    // 10 FOOT SHOT
-    if (_drive
-    Controller.getDriveLeftTrigger() > 0)
+    // 10 FOOT SHOT1Z
+    if (_operatorController.getDriveRightTrigger() > 0)
     {
       if (!_operatorController.RButton()) _shoot.Shoot(.28); else if (_operatorController.RButton()) _shoot.Shoot(.32);
       //init line (10 foot)
-      if (_shootingEncoder.getVelocity() > 1250 && _shootingEncoder.getVelocity() < 1500 &&!_operatorController.RButton())
+      if (_shootingEncoder.getVelocity() > 1250 && _shootingEncoder.getVelocity() < 1500 && !_operatorController.RButton())
       {
         _shoot.StopMotors();
         _feeder.Feed(-.4);
@@ -285,7 +291,7 @@ public class Robot extends TimedRobot {
       _shoot.Shoot(.2);
     }
 
-    if (_operatorController.getDriveLeftTrigger() == 1 && (Math.abs(_driveController.getDriveLeftY()) == 0) && (Math.abs(_driveController.getDriveRightX()) == 0))
+    if (_driveController.getDriveLeftTrigger() == 1 && (Math.abs(_driveController.getDriveLeftY()) == 0) && (Math.abs(_driveController.getDriveRightX()) == 0))
     {
       _shoot.Shoot(.31);
       DriveAdjust driveAdjust = PID.CalculateDrive(-_limelight.GetTx(), _limelight.GetTy());
