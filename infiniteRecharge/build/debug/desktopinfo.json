@@ -1,0 +1,11 @@
+[
+  {
+    "name": "2.26.20 (in project 2.26.20)",
+    "file": "/home/stikcye/Desktop/Github/2.26.20/build/libs/2.26.20.jar",
+    "extensions": [
+      "/home/stikcye/Desktop/Github/2.26.20/build/tmp/expandedArchives/halsim_gui-2020.1.2-linuxx86-64.zip_13a957a07e2c8c24ca96a47c63f427a9/linux/x86-64/shared/libhalsim_gui.so"
+    ],
+    "librarydir": "/home/stikcye/Desktop/Github/2.26.20/build/tmp/jniExtractDir",
+    "mainclass": "frc.robot.Main"
+  }
+]
