@@ -4,27 +4,29 @@ import frc.robot.systems.drive.IMotor;
 
 public class Collector
 {
-    private IMotor _CollectMotor;
+    private IMotor _CollecterMotor;
 
     private final double _power = .7;
 
-    public Collector(IMotor CollectMotor)
+    public Collector(IMotor CollecterMotor)
     {
-        _CollectMotor = CollectMotor;
+        _CollecterMotor = CollecterMotor;
+
+        _CollecterMotor.IsInverted(true);
     }
 
     public void Collect()
     {
-        _CollectMotor.SetPower(-_power);
+        _CollecterMotor.SetPower(_power);
     } 
 
     public void ReverseCollector()
     {
-        _CollectMotor.SetPower(_power*.5);
+        _CollecterMotor.SetPower(-_power*.5);
     }
 
     public void StopMotor()
     {
-        _CollectMotor.SetPower(0);
+        _CollecterMotor.SetPower(0);
     }
 }

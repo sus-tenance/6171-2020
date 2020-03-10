@@ -11,16 +11,18 @@ public class Feeder
     public Feeder(IMotor feederMotor)
     {
         _feederMotor = feederMotor;
+
+        _feederMotor.IsInverted(true);
     }
 
     public void Feed()
     {
-        _feederMotor.SetPower(-_power);
+        _feederMotor.SetPower(_power);
     }
 
     public void Feed(double power)
     {
-        _feederMotor.SetPower(power);
+        _feederMotor.SetPower(-power);
     }
 
     public void StopMotor()

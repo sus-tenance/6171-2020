@@ -9,24 +9,16 @@ package frc.robot;
 
 import com.revrobotics.CANEncoder;
 
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.outputs.motion.OI;
-import frc.robot.outputs.motion.PID;
+import frc.robot.outputs.vision.Camera;
 import frc.robot.outputs.vision.Limelight;
-
 import frc.robot.mapping.Robotmap;
-
-import frc.robot.models.DriveAdjust;
-import frc.robot.models.enums.DriverType;
 import frc.robot.models.enums.RestMode;
-
 import frc.robot.systems.drive.IMotor;
 import frc.robot.systems.drive.SparkMax;
 import frc.robot.systems.drive.Talon;
@@ -46,105 +38,92 @@ import frc.robot.systems.subsystems.Shooter;
  */
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
+  private static final String kForwardAuto = "Auto to go forward";
+  private static final String kBackwardAuto = "Auto to go backward";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
   //#region motors
-  /**
-   * DRIVE MOTORS
-   */
-  private IMotor mFrontLeft = new SparkMax(Robotmap._frontLeftMotorID);
-  private IMotor mRearLeft = new SparkMax(Robotmap._rearLeftMotorID);
-  private IMotor mFrontRight = new SparkMax(Robotmap._frontRightMotorID);
-  private IMotor mRearRight = new SparkMax(Robotmap._rearRightMotorID);
+  
+  //drivetrain
+  private IMotor _FrontLeftMotor = new SparkMax(Robotmap._frontLeftMotorID);
+  private IMotor _RearLeftMotor = new SparkMax(Robotmap._rearLeftMotorID);
+  private IMotor _FrontRightMotor = new SparkMax(Robotmap._frontRightMotorID);
+  private IMotor _RearRightMotor = new SparkMax(Robotmap._rearRightMotorID);
 
-  private SpeedControllerGroup leftGroup = new SpeedControllerGroup(mFrontLeft.GetSparkMax(), mRearLeft.GetSparkMax());
-  private SpeedControllerGroup rightGroup = new SpeedControllerGroup(mFrontRight.GetSparkMax(), mRearRight.GetSparkMax());
-  //private MecanumDrivetrain _drivetrain = new MecanumDrivetrain(mFrontLeft, mRearLeft, mFrontRight, mRearRight);
-  private ArcadeDrive _drivetrain = new ArcadeDrive(leftGroup, rightGroup);
+  private SpeedControllerGroup _LeftMotorGroup = new SpeedControllerGroup(_FrontLeftMotor.GetSparkMax(), _RearLeftMotor.GetSparkMax());
+  private SpeedControllerGroup _RightMotorGroup = new SpeedControllerGroup(_FrontRightMotor.GetSparkMax(), _RearRightMotor.GetSparkMax());
+  //private MecanumDrivetrain _Drivetrain = new MecanumDrivetrain(mFrontLeft, mRearLeft, mFrontRight, mRearRight);
+  private ArcadeDrive _Drivetrain = new ArcadeDrive(_LeftMotorGroup, _RightMotorGroup);
 
-  /**
-   * SHOOTER MOTORS
-   */
+  //shooter
   private IMotor _ShootingOne = new SparkMax(Robotmap._shooterLeftMotorID);
   private IMotor _ShootingTwo = new SparkMax(Robotmap._shooterRightMotorID);
-  private CANEncoder _shootingEncoder = new CANEncoder(_ShootingOne.GetSparkMax());
+  private CANEncoder _ShootingEncoder = new CANEncoder(_ShootingOne.GetSparkMax());
   
-  private Shooter _shoot = new Shooter(_ShootingOne, _ShootingTwo);
+  private Shooter _Shoot = new Shooter(_ShootingOne, _ShootingTwo);
 
-  /**
-   * INTAKE MOTOR
-   */
-  private IMotor _intakeMotor = new Talon(Robotmap._intakeMotorID);
+  //intake 
+  private IMotor _CollectorMotor = new Talon(Robotmap._intakeMotorID);
 
-  private Collector _intake = new Collector(_intakeMotor);
+  private Collector _Collector = new Collector(_CollectorMotor);
 
-  /**
-   * HOPPER MOTOR
-   */
-  private IMotor _hopperLeftMotor = new Talon(Robotmap._hopperLeftMotorID);
-  private IMotor _hopperRightMotor = new Talon(Robotmap._hopperRightMotorID);
+  //hopper
+  private IMotor _HopperLeftMotor = new Talon(Robotmap._hopperLeftMotorID);
+  private IMotor _HopperRightMotor = new Talon(Robotmap._hopperRightMotorID);
 
-  private Hopper _hopper = new Hopper(_hopperLeftMotor, _hopperRightMotor);
+  private Hopper _Hopper = new Hopper(_HopperLeftMotor, _HopperRightMotor);
 
-   /**
-    * FEEDER MOTOR
-    */
-    private IMotor _feederMotor = new Talon(Robotmap._feederMotorID);
+   //feeder
+  private IMotor _FeederMotor = new Talon(Robotmap._feederMotorID);
 
-    private Feeder _feeder = new Feeder(_feederMotor);
+  private Feeder _Feeder = new Feeder(_FeederMotor);
 
-  /**
-   * CLIMB/WINCH MOTORS
-   */
-  private IMotor _winchLeft = new SparkMax(Robotmap._winchLeftMotor);
-  private IMotor _winchRight = new SparkMax(Robotmap._winchRightMotor);
-  private IMotor _slide = new Talon(Robotmap._slideMotor);
+  //climb and winch
+  private IMotor _WinchLeftMotor = new SparkMax(Robotmap._winchLeftMotor);
+  private IMotor _WinchRightMotor = new SparkMax(Robotmap._winchRightMotor);
+  private IMotor _SlideMotor = new Talon(Robotmap._slideMotor);
 
-  private Climb _climb = new Climb(_slide, _winchLeft, _winchRight);
+  private Climb _Climb = new Climb(_SlideMotor, _WinchLeftMotor, _WinchRightMotor);
   //#endregion motors
 
-  private OI _driveController;
-  private OI _operatorController;
-  private Limelight _limelight;
+  //#region utilities
+  private OI _DriveController;
+  private OI _OperatorController;
+  private Limelight _Limelight;
+  private Camera _FeedCamera;
+  //#endregion utilities
 
-  //Needed for autonomous
-  private Timer _McTimer = new Timer();
-  private final double power = 0.27;
-  private final double _desiredVelocity = 1230;
-
+  //#region game stuff
+  private Autonomous _Autonomous = new Autonomous(_Shoot, _Feeder, _Drivetrain, _ShootingEncoder);
+  private Teleop _Teleop = new Teleop(_Shoot, _Feeder, _Collector, _Hopper, _Drivetrain, _ShootingEncoder, _DriveController, _OperatorController);
+  //#endregion game stuff
+  
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
    */
   @Override
   public void robotInit() {
+    //auton chooser
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    _driveController = new OI(0);
-    _operatorController = new OI(1);
+    
+    //vision
+    _Limelight = new Limelight();
+    _FeedCamera = new Camera(0);
 
-    _limelight = new Limelight();
-
-    mFrontLeft.SetIdleMode(RestMode.Brake);
-    mRearLeft.SetIdleMode(RestMode.Brake);
-    mFrontRight.SetIdleMode(RestMode.Brake);
-    mRearRight.SetIdleMode(RestMode.Brake);
-
-    UsbCamera intakeCam = CameraServer.getInstance().startAutomaticCapture(0);
-    intakeCam.setResolution(240, 240);
-    intakeCam.setFPS(30);
-
-    UsbCamera feedCam = CameraServer.getInstance().startAutomaticCapture(1);
-    feedCam.setResolution(240, 240);
-    feedCam.setFPS(30);
-
-    SmartDashboard.getNumber("velocity", 0.0);
-
+    //#region motor stuff
+    _FrontLeftMotor.SetIdleMode(RestMode.Brake);
+    _RearLeftMotor.SetIdleMode(RestMode.Brake);
+    _FrontRightMotor.SetIdleMode(RestMode.Brake);
+    _RearRightMotor.SetIdleMode(RestMode.Brake);
     _ShootingOne.Reset();
     _ShootingTwo.Reset();
+    _FeederMotor.Reset();
+    //#endregion motor stuff
   }
 
   /**
@@ -157,8 +136,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putNumber("shooter rpm", _shootingEncoder.getVelocity());
-    _limelight.Update();
+    SmartDashboard.putNumber("shooter rpm", _ShootingEncoder.getVelocity());
+    _Limelight.Update();
   }
 
   /**
@@ -175,15 +154,11 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
+    m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: maxOutput" + m_autoSelected);
     
-
-    _McTimer.start();
-    _feederMotor.Reset();
-    _feeder.Feed(0.0);
+    _Autonomous.StartAutonomousTimer();
   }
-
   /**
    * This function is called periodically during autonomous.
    */
@@ -193,22 +168,16 @@ public class Robot extends TimedRobot {
       case kCustomAuto:
         // Put custom auto code here
         break;
+      case kForwardAuto:
+      _Autonomous.RunAutonomousForwards();
+        break;
+      case kBackwardAuto:
+      _Autonomous.RunAutonomousBackwards();
+        break;
       case kDefaultAuto:
       default:
-      _shoot.Shoot(power);
-        if (_shootingEncoder.getVelocity() > _desiredVelocity)
-        {
-          _feeder.Feed(-.7);
-        }
-        if (_McTimer.get() > 8 && _McTimer.get() < 12)
-        {
-          _drivetrain.Drive(0.5, 0.0);
-        }
-        else if (_McTimer.get() > 12)
-        {
-          _drivetrain.Drive(0.0, 0.0);
-        }
-        break;
+        _Autonomous.RunAutonomousBackwards();
+      break;
     }
   }
 
@@ -218,85 +187,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() 
   {
-    //Driver
-    _drivetrain.Drive(_driveController);
-
-    //Operator
-    if (_operatorController.dpad() == 180.0)
-    {
-      _hopper.ReverseHopper();
-    }
-    else if (_operatorController.dpad() == 90.0)
-    {
-      _hopper.Hop();
-    }
-    else
-    {
-      _hopper.StopMotors();
-    }
-
-    if (_driveController.RButton())
-    {      
-      _intake.Collect();    
-    }
-    else if (_driveController.LButton())
-    {
-      _intake.ReverseCollector();
-    }
-    else 
-    {
-      _intake.StopMotor();
-    }
-
-    if (_operatorController.getY())
-    {
-      _feeder.Feed(-0.4);
-    }
-    else if (_operatorController.getA())
-    {
-      _feeder.Feed(0.4);
-    }
-    else if (_operatorController.getB())
-    {
-      _feeder.Feed(-0.2);
-    }
-    else
-    {
-      _feeder.StopMotor();
-    }
-
-    // 10 FOOT SHOT1Z
-    if (_operatorController.getDriveRightTrigger() > 0)
-    {
-      if (!_operatorController.RButton()) _shoot.Shoot(.28); else if (_operatorController.RButton()) _shoot.Shoot(.32);
-      //init line (10 foot)
-      if (_shootingEncoder.getVelocity() > 1250 && _shootingEncoder.getVelocity() < 1500 && !_operatorController.RButton())
-      {
-        _shoot.StopMotors();
-        _feeder.Feed(-.4);
-      }
-      //trench (18 foot)
-      else if (_shootingEncoder.getVelocity() > 1645 && _operatorController.RButton())
-      {
-        _shoot.StopMotors();
-        _feeder.Feed(-.4);
-      }
-      else if (!_operatorController.getA() || !_operatorController.getY())
-      {
-        _feeder.Feed(0.0);
-      }
-    }
-    else
-    {
-      _shoot.Shoot(.2);
-    }
-
-    if (_driveController.getDriveLeftTrigger() == 1 && (Math.abs(_driveController.getDriveLeftY()) == 0) && (Math.abs(_driveController.getDriveRightX()) == 0))
-    {
-      _shoot.Shoot(.31);
-      DriveAdjust driveAdjust = PID.CalculateDrive(-_limelight.GetTx(), _limelight.GetTy());
-    _drivetrain.Drive(driveAdjust);
-    }
+    _Teleop.RunTeleop();
   }
   
 
@@ -305,13 +196,5 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-    if (_shootingEncoder.getVelocity() < _desiredVelocity)
-    {
-      _shoot.Shoot(.3);
-    }
-    else
-    {
-      _shoot.StopMotors();
-    }
   }
 }

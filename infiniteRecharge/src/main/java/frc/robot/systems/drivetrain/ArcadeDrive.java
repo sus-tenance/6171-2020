@@ -2,7 +2,6 @@ package frc.robot.systems.drivetrain;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import frc.robot.models.enums.*;
 import frc.robot.models.*;
 import frc.robot.outputs.motion.OI;
 
@@ -12,7 +11,7 @@ public class ArcadeDrive
     public ArcadeDrive(SpeedControllerGroup leftGroup, SpeedControllerGroup rightGroup)
     {
         _robotDrive = new DifferentialDrive(leftGroup, rightGroup);
-        _robotDrive.setMaxOutput(.75);
+        _robotDrive.setMaxOutput(.80);
     }
 
     /*
@@ -44,25 +43,39 @@ public class ArcadeDrive
     }
     */
 
+    
+    /**
+     * drives the robot with the controller 
+     * @param oi is the controller :^)
+     */
     public void Drive(OI oi)
     {
         
-        double percision = oi.getDriveRightTrigger() * .5;
-        if (percision > 0)
+        double precision = oi.getDriveRightTrigger() * .5;
+        if (precision > 0) 
         {
-            _robotDrive.arcadeDrive(oi.getDriveLeftY() * percision, oi.getDriveRightX() * percision);
+            _robotDrive.arcadeDrive(oi.getDriveLeftY() * precision, oi.getDriveRightX() * precision);
         }
         else 
         {
-            _robotDrive.arcadeDrive(oi.getDriveLeftY()*.87, -oi.getDriveRightX() * 1.5);
+            _robotDrive.arcadeDrive(oi.getDriveLeftY(), -oi.getDriveRightX() * 1.5);
         }
     }
 
+    /**
+     * used to aim/drive to a target
+     * @param driveAdjust the driveadjust
+     */
     public void Drive(DriveAdjust driveAdjust)
     {
         _robotDrive.arcadeDrive(0, driveAdjust.getAimAdjust());
     }
 
+    /**
+     * makes custom drive speed settings for arcade drive
+     * @param driveSpeed the forward/backward speed
+     * @param turnSpeed the left/right speed
+     */
     public void Drive(double driveSpeed, double turnSpeed)
     {
         _robotDrive.arcadeDrive(driveSpeed, turnSpeed);

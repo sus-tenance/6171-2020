@@ -12,17 +12,19 @@ public class Hopper
     {
         _hopperLeft = hopperLeft;
         _hopperRight = hopperRight;
+
+        _hopperRight.IsInverted(true);
     }
 
     public void Hop()
     {
         _hopperLeft.SetPower(_power);
-        _hopperRight.SetPower(-_power);
+        _hopperRight.SetPower(_power);
     }
 
     public void ReverseHopper()
     {
-        _hopperLeft.SetPower(-_power);
+        _hopperLeft.SetPower(_power);
         _hopperRight.SetPower(_power);
     }
 

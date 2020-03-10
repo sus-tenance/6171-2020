@@ -26,6 +26,7 @@ public class PID
         double aimAdjust = 0.0;
         double distanceAdjust = 0.0;
 
+        //causes the robot to aim at a target near tx
         if (tx > 0.15)
         {
             aimAdjust = kpAim * headingError + minAimThreshold; //Seems like +/- Thresholds are flipped
@@ -35,6 +36,7 @@ public class PID
             aimAdjust = kpAim * headingError - minAimThreshold;
         }
         
+        //causes the robot to drive to a target location near ty
         if (ty > 0.15)
         {
             distanceAdjust = -1 * kpDistance * distanceError + minDistanceThreshold; //Seems like +/- Thresholds are flipped      
@@ -54,6 +56,7 @@ public class PID
         return driveAdjust;
     }
 
+    //actually useless lmao?
     public int GetError()
     {   
         error = 0;
